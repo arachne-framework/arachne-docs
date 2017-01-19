@@ -6,6 +6,7 @@ site_description: 'Documentation for the Arachne Web Framework'
 copyright: '© Luke VanderHart 2017'
 pages:
     - Home: index.md
+    - Architectural Overview: architecture.md
     - Tutorials:
         - 'Creating a Project': tutorials/creating-a-project.md
         - 'HTTP Requests': tutorials/http-requests.md
