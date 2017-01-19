@@ -55,11 +55,11 @@ The distinguishing feature of an Arachne module compared to any other Clojure li
 
 Modules may declare dependencies on other modules, and an Arachne [application](#applications) may depend on any number of modules. Only modules that are directly or transitively required by a given application are considered to be "active"; merely being present on the classpath is not sufficient to cause a module to be active in a given system.
 
-Modules have hooks that allow active modules to participate in an Arachne system in a variety of ways. Specifically, modules may:
+Modules have hooks that allow active modules to participate in an Arachne system in a variety of ways. Specifically, these hooks are:
 
- - _provide schema_: Each active module provides some configuration [schema](#schema), defining the concepts, entity types and data that it exposes or expects to be present in the configuration. Modules may reference entities or attributes defined in the schema of modules that they depend upon.
- - _apply initializers_: When creating a configuration, after the schema is installed, each module has an opportunity to transact some initial data to the configuration. Module initializers are applied in dependency order: that is, the initializers of required modules are applied before the initalizers of the modules that depend upon them.
- - _apply configurers_: Each module also has the opportunity to query and update the configuration, _after_ modules that depend upon it have been initialized and configured. Module configurers are applied in reverse dependency order.
+ - _schema_: Each active module provides some configuration [schema](#schema), defining the concepts, entity types and data that it exposes or expects to be present in the configuration. Modules may reference entities or attributes defined in the schema of modules that they depend upon.
+ - _initializers_: When creating a configuration, after the schema is installed, each module has an opportunity to transact some initial data to the configuration. Module initializers are applied in dependency order: that is, the initializers of required modules are applied before the initalizers of the modules that depend upon them.
+ - _configure_: Each module also has the opportunity to query and update the configuration, _after_ modules that depend upon it have been initialized and configured. Module configuration is applied in reverse dependency order.
 
 In addition, modules usually provide a library of DSL forms that make it easier to create and manipulate the configuration entities that they define in their schema.
 
@@ -68,3 +68,24 @@ In addition, modules usually provide a library of DSL forms that make it easier 
 An Arachne application is just a special case of an Arachne module, where the module initializer is (usually) a user-supplied configuration script.
 
 The API for initializing a new Arachne config requires users to specify the name of an Arachne application, which will be discovered in a classpath-relative `arachne.edn` file in the same way that it is for modules.
+
+## Startup Sequence
+
+Based on the above description of [modules](#modules) and the [runtime](#runtime), the complete initialization and startup sequence for a specific Arachne application is as follows:
+
+1. **Building the configuration**
+
+    1. A graph of active modules is determined, starting with the application and its dependencies.
+    2. A schema is assembled by asking each active module if it has any schema to contribute (via its `schema` hook). A fresh configuration is built, with a schema that is the union of the active module schemas.
+    3. In dependency order, each module has the opportunity to update the fresh configuration using its `initializers` hook. The application itself will have its initializers (including any user-supplied DSL scripts) called last.
+    4. In reverse dependency order, each module has the opportunity to query and update the configuration using its `configure` hook. The application will go first, and the module with the fewest dependencies (which will always be [arachne.core](modules/arachne.core.md)), last.
+
+1. **Initializing the runtime**
+
+    The configuration is passed to the runtime initializer function, which will instantiate all the components by calling their constructors.
+    <br><br>
+
+1. **Starting the runtime**
+
+    Each component object will have it's `com.stuartsierra.component/start` method called, in dependency order, after having all its own dependencies `assoc`ed on.
+
