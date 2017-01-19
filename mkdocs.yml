@@ -1,1 +1,26 @@
-site_name: My Docs
+site_name: Arachne Web Framework Documentation
+theme: readthedocs
+site_url: http://docs.arachne-framework.org
+repo_url: https://github.com/arachne-framework
+site_description: 'Documentation for the Arachne Web Framework'
+copyright: '© Luke VanderHart 2017'
+pages:
+    - Home: index.md
+    - Tutorials:
+        - 'Creating a Project': tutorials/creating-a-project.md
+        - 'HTTP Requests': tutorials/http-requests.md
+        - 'Dependency Injection': tutorials/dependency-injection.md
+        - 'Static Assets': tutorials/serving-assets.md
+        - 'Request Interceptors': tutorials/interceptors.md
+        - 'ClojureSript': tutorials/cljs.md
+        - 'Figwheel': tutorials/figwheel.md
+    - Modules:
+        - 'arachne.core': modules/arachne.core.md
+        - 'arachne.http': modules/arachne.http.md
+        - 'arachne.pedestal': modules/arachne.pedestal.md
+        - 'arachne.assets': modules/arachne.assets.md
+        - 'arachne.cljs': modules/arachne.cljs.md
+        - 'arachne.figwheel': modules/arachne.figwheel.md
+    - Contributing: contributing.md
+
+

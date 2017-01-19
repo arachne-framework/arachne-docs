@@ -1,0 +1,19 @@
+.wy-side-nav-search, .wy-nav-top {
+  background-color: #654D53;
+}
+.wy-side-nav-search input[type=text] {
+  border-color: #654D53;
+}
+
+
+.wy-nav-content a:visited {
+  color: #2980B9;
+}
+
+a.toctree-l4 {
+   display: none;
+}
+
+.wy-nav-content-wrap {
+   background-color: inherit;
+}
