@@ -1,3 +1,3 @@
 lein codox
-rm -rf ../docs/api
-mv target/doc ../docs/api
+rm -rf ../site/api
+mv target/doc ../site/api
