@@ -249,6 +249,11 @@
             "location": "/contributing/#contributors-guide", 
             "text": "Coming soon", 
             "title": "Contributor's Guide"
+        }, 
+        {
+            "location": "/api/", 
+            "text": "placeholder, API docs will be generated on top of this", 
+            "title": "API Documentation"
         }
     ]
 }

@@ -111,4 +111,12 @@
     </url>
     
 
+    
+    <url>
+     <loc>http://docs.arachne-framework.org/api/</loc>
+     <lastmod>2017-01-20</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
 </urlset>
