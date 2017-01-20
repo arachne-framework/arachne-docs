@@ -1,7 +1,7 @@
 # Concepts
 
-Todo: write me
+Documentation coming soon
 
 # Configuration
 
-Todo: write me
+Documentation coming soon

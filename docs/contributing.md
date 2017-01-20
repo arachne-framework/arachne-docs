@@ -1,4 +1,4 @@
 # Contributor's Guide
 
-Coming soon
+Coming soon!
 
