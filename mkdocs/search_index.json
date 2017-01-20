@@ -92,42 +92,67 @@
         }, 
         {
             "location": "/tutorials/http-requests/", 
-            "text": "Handling HTTP Requests\n\n\nTodo: write me", 
+            "text": "Handling HTTP Requests\n\n\n\nThis tutorial extends the project started in the \ngetting started tutorial\n and adds the Pedestal module. It shows how to define and start a HTTP server, and handle incoming HTTP requests using custom handlers functions.\n\n\nYou can find the complete source code used in this tutorial on \nGithub\n.\n\n\nTo make the most of this particular tutorial, you will be most effective if you have already read and understood the material in the \ngetting started tutorial\n\n\nEnabling the Pedestal module\n\n\nTo make our application into an HTTP server, we'll need add the \narachne-pedestal\n Arachne module to our app. \nPedestal\n is an industrial strength HTTP server for Clojure, and Arachne wraps it, inheriting the benefits that it provides.\n\n\n\n\nThe \narachne-pedestal\n module uses Pedestal, as do many of Arachne's official modules, because we needed to pick \nsome\n http server and Pedestal fit the bill nicely. However, there's nothing about Arachne itself that requires Pedestal; in theory you could also (for example) build an \"arachne-ring\" module to fill the same role. Most of Arachne's container-agnostic HTTP concepts and handling code is already pulled out into a separate \narachne-http\n module (which \narachne-pedestal\n depends on) and could be freely reused.\n\n\nOf course, any modules that depend on \narachne-pedestal\n would then also need to be modified, or alternatives created.\n\n\n\n\n\nFirst, we'll need to add a Leiningen dependency, to make sure \narachne-pedestal\n is on our classpath. Because \narachne-pedestal\n ultimately depends on \narachne-core\n as well, we can actually \nreplace\n \narachne-core\n in the \nproject.clj\n: it will still be required.\n\n\nAfter adding it, your leiningen dependencies should look something like this:\n\n\n:dependencies [[org.clojure/clojure \n1.9.0-alpha14\n]\n               [org.arachne-framework/arachne-pedestal \n0.1.0-master-0036-59ecd65\n]\n               [datascript \n0.15.5\n]\n               [ch.qos.logback/logback-classic \n1.1.3\n]]\n\n\n\n\nThen, we need to update the \narachne.edn\n file to indicate that our application should activate the Pedestal module. Just like \nproject.clj\n, we can actually replace the core module; because the Pedestal depends on it transitively, we no longer need depend on it explicitly.\n\n\n[{:arachne/name :myproj/app\n  :arachne/inits [\nconfig/myproj.clj\n]\n  :arachne/dependencies [:org.arachne-framework/arachne-pedestal]}]\n\n\n\n\nWriting a handler function\n\n\nIn Arachne (and Pedestal) (and Ring), a handler function is a function which takes a request as its argument, and returns a response. Both the request and the response are represented as Clojure maps.\n\n\nBelow is what is possibly the simplest possible handler function. We will add it to our app, in \nsrc/myproj/core.clj\n:\n\n\n(defn hello-handler\n  [req]\n  {:status 200\n   :body \nHello, world!\n})\n\n\n\n\nThis function just responds with \n\"Hello, world!\"\n to any incoming request. Easy enough!\n\n\nThis is literally all of the project code we need to write to turn our application into a web application. Everything else will be defined in the Arachne configuration.\n\n\nServer configuraton\n\n\nNow, for the interesting part: updating the config script to start a HTTP server serving up our handler.\n\n\nFirst, we will need to define a Component representing our handler function. Add the following to your config script:\n\n\n(require '[arachne.http.dsl :as h])\n\n(h/handler :myproj/hello 'myproj.core/hello-handler)\n\n\n\n\nThe \narachne.http.dsl/handler\n function looks very much like the \narachne.core.dsl/component\n function we used earlier. This is no accident! In fact, \nhandler\n is actually defining a component, too: just a specific kind of component. The difference is that the function specified should identify a handler function (the one we just wrote) instead of being a constructor that can return an arbitrary object. Note that we still need to give our handler component a name: \n:myproj/hello\n. We'll need to refer to this in the next step.\n\n\nNext, we will add some DSL forms that define a HTTP server, and tell it how to serve our handler function:\n\n\n(require '[arachne.pedestal.dsl :as p])\n\n(p/server :myproj/server 8080\n\n  (h/endpoint :get \n/\n :myproj/hello)\n\n  )\n\n\n\n\nThe \narachne.pedestal.dsl/server\n form creates yet another component entity named \n:myproj/server\n. Instead of passing a symbol that identifies a constructor or a handler function, \nserver\n requires a port.\n\n\n\nSee the pattern? Most Arachne DSL functions that define a component entity take the Arachne ID of the component as their first argument, and then other functions can refer to that ID to connect components together.\n\n\n\n\nNested \ninside\n the server element, we declare a HTTP endpoint, using the \narachne.http.dsl/endpoint\n function. This function takes three arguments:\n\n\n\n\nThe HTTP method that this endpoint responds to, as a Clojure keyword. You may also pass a set of keywords if the endpoint can respond to multiple request types.\n\n\nThe route to which to \"attach\" the endpoint: requests to this route will be delegated to the endpoint.\n\n\nThe Arachne ID of the endpoint itself. This is a reference to the handler endpoint we declared above.\n\n\n\n\nIn general, this is how an Arachne applications always define their routing structure: A \nserver\n DSL form, with nested forms for all the endpoints inside.\n\n\nAgain, it cannot be emphasized enough: these DSL forms do not create an actual Pedestal server. They create entities in the config that define the server. No server is actually started, and no ports will be opened until we use this config to initialize a runtime and call \nstart\n.\n\n\nThere's just one more step: we need to tell Arachne that this HTTP server is part of our runtime, and should be started when the runtime starts. Replace the existing \na/runtime\n call with:\n\n\n(a/runtime :myproj/runtime [:myproj/server])\n\n\n\n\nAt this point, your full configuration script should look something like this:\n\n\n(require '[arachne.core.dsl :as a])\n(require '[arachne.http.dsl :as h])\n(require '[arachne.pedestal.dsl :as p])\n\n(a/component :myproj/widget-1 'myproj.core/make-widget)\n\n(a/runtime :myproj/runtime [:myproj/server])\n\n(h/handler :myproj/hello 'myproj.core/hello-handler)\n\n(p/server :myproj/server 8080\n\n  (h/endpoint :get \n/\n :myproj/hello)\n\n  )\n\n\n\n\nRunning the server\n\n\nAt this point, we can start a runtime. But before we do, we should configure Logback to log a little bit less verbosely. If no \nlogback.xml\n file is supplied, the default log level is \nDEBUG\n, and Pedestal dumps a \nlot\n of debug messages. Copy and paste the following \nlogback.xml\n file into your \nresources\n directory to set a default log level of \nINFO\n and cut down on the noise:\n\n\nconfiguration debug=\nfalse\n\n\n    -\nappender name=\nSTDOUT\n class=\nch.qos.logback.core.ConsoleAppender\n\n        \nencoder\n\n            \npattern\n%d{HH:mm:ss.SSS} %-5level - %logger{36} %msg%n\n/pattern\n\n        \n/encoder\n\n    \n/appender\n\n\n    \nroot level=\nINFO\n\n      \nappender-ref ref=\nSTDOUT\n/\n\n    \n/root\n\n\n\n/configuration\n\n\n\n\n\nThen, once logging is set up, we can run the server. Here, we'll use the command line (for simplicity), though of course you could use a REPL as described in the \ncreating a project\n tutorial.\n\n\nlein run :myproj/app :myproj/runtime\n\n\n\n\nYou should see log output indicating that the server has started.\n\n\nHit the \nhttp://localhost:8080/\n URL to see your endpoint in action!\n\n\nPath params\n\n\nYou aren't limited to specific, hardcoded routes. Arachne (via Pedestal) also allows you to use a semicolon in a route name to create a \npath parameter\n. Values at that path are then available in the request, in a map under the \n:path-params\n key.\n\n\nLet's try it out with a new handler function:\n\n\n(defn greeter\n  [req]\n  (let [name (get-in req [:path-params :name])]\n    {:status 200\n     :body (if (empty? name)\n             \nWho's there!?\n\n             (str \nHello, \n name \n!\n))}))\n\n\n\n\nAnd the corresponding line in the configuration script, inside our server:\n\n\n(h/endpoint :get \n/greet/:name\n (h/handler 'myproj.core/greeter))\n\n\n\n\nThe \n:name\n key in the path indicates that any value at that URL should be bound to the \n:name\n key in the request's \n:path-params\n.\n\n\nYou may also notice that we've defined the endpoint in a different way than we did before. Instead of giving the handler component an Arachne ID and then referencing it by ID, we defined it anonymously and inline, declaring it \ninside\n the \nh/endpoint\n form.\n\n\nThat works fine! Arachne DSL functions which define components (including \narachne.core.dsl/component\n, \narachne.http.dsl/handler\n and \narachne.pedestal.dsl/server\n, that we've seen so far) all return the entity ID of their newly created config entity, in the context configuration. And DSL forms which reference another component (such as \narachne.http.dsl/endpoint\n) can accept either an Arachne ID, \nor\n an entity ID as a component identifier.\n\n\nThis means that the following three forms are equivalent:\n\n\n(h/endpoint :get \n/greet/:name\n (h/handler 'myproj.core/greeter))\n\n\n\n\n(def handler-eid (h/handler 'myproj.core/greeter))\n(h/endpoint :get \n/greet/:name\n handler-eid)\n\n\n\n\n(h/handler :myproj/greeter 'myproj.core/greeter)\n(h/endpoint :get \n/greet/:name\n :myproj/greeter)\n\n\n\n\nAnd, of course, we could both define a handler inline \nand\n give it an Arachne ID:\n\n\n(h/endpoint :get \n/greet/:name\n (h/handler :myproj/greeter 'myproj.core/greeter))\n\n\n\n\nYou can use whichever of these variations leads to the cleanest and most readable config scripts.\n\n\nDo note, though, that if you don't give a component an Arachne ID, and you don't capture the return value of the DSL function, you've just created a component entity that you have no ability to refer to, which will be pretty useless to you.\n\n\nComponents and the runtime\n\n\nIf you were looking for it, you might also have noticed that we're not getting the \"Hello World\" message from our Widget component, which we built in the last tutorial. That's because when we edited our \n(a/runtime)\n form to include \n:myproj/server\n instead of \n:myproj/widget-1\n, we removed all references to the widget from the components we told Arachne to start. Because nothing was depending on it, it was neither instantiated nor started with the rest of the System.\n\n\nIf we did want to have our custom component to start up, we can add it to the runtime, along with our HTTP server, like so:\n\n\n(a/runtime :myproj/runtime [:myproj/server :myproj/widget-1])\n\n\n\n\nNow, our custom component will start up alongside the server itself.\n\n\nFor much more on components and component dependencies, see the next tutorial on \ndependency injection\n.", 
             "title": "Handling HTTP Requests"
         }, 
         {
-            "location": "/tutorials/http-requests/#handling-http-requests", 
-            "text": "Todo: write me", 
-            "title": "Handling HTTP Requests"
+            "location": "/tutorials/http-requests/#enabling-the-pedestal-module", 
+            "text": "To make our application into an HTTP server, we'll need add the  arachne-pedestal  Arachne module to our app.  Pedestal  is an industrial strength HTTP server for Clojure, and Arachne wraps it, inheriting the benefits that it provides.   The  arachne-pedestal  module uses Pedestal, as do many of Arachne's official modules, because we needed to pick  some  http server and Pedestal fit the bill nicely. However, there's nothing about Arachne itself that requires Pedestal; in theory you could also (for example) build an \"arachne-ring\" module to fill the same role. Most of Arachne's container-agnostic HTTP concepts and handling code is already pulled out into a separate  arachne-http  module (which  arachne-pedestal  depends on) and could be freely reused.  Of course, any modules that depend on  arachne-pedestal  would then also need to be modified, or alternatives created.   First, we'll need to add a Leiningen dependency, to make sure  arachne-pedestal  is on our classpath. Because  arachne-pedestal  ultimately depends on  arachne-core  as well, we can actually  replace   arachne-core  in the  project.clj : it will still be required.  After adding it, your leiningen dependencies should look something like this:  :dependencies [[org.clojure/clojure  1.9.0-alpha14 ]\n               [org.arachne-framework/arachne-pedestal  0.1.0-master-0036-59ecd65 ]\n               [datascript  0.15.5 ]\n               [ch.qos.logback/logback-classic  1.1.3 ]]  Then, we need to update the  arachne.edn  file to indicate that our application should activate the Pedestal module. Just like  project.clj , we can actually replace the core module; because the Pedestal depends on it transitively, we no longer need depend on it explicitly.  [{:arachne/name :myproj/app\n  :arachne/inits [ config/myproj.clj ]\n  :arachne/dependencies [:org.arachne-framework/arachne-pedestal]}]", 
+            "title": "Enabling the Pedestal module"
+        }, 
+        {
+            "location": "/tutorials/http-requests/#writing-a-handler-function", 
+            "text": "In Arachne (and Pedestal) (and Ring), a handler function is a function which takes a request as its argument, and returns a response. Both the request and the response are represented as Clojure maps.  Below is what is possibly the simplest possible handler function. We will add it to our app, in  src/myproj/core.clj :  (defn hello-handler\n  [req]\n  {:status 200\n   :body  Hello, world! })  This function just responds with  \"Hello, world!\"  to any incoming request. Easy enough!  This is literally all of the project code we need to write to turn our application into a web application. Everything else will be defined in the Arachne configuration.", 
+            "title": "Writing a handler function"
+        }, 
+        {
+            "location": "/tutorials/http-requests/#server-configuraton", 
+            "text": "Now, for the interesting part: updating the config script to start a HTTP server serving up our handler.  First, we will need to define a Component representing our handler function. Add the following to your config script:  (require '[arachne.http.dsl :as h])\n\n(h/handler :myproj/hello 'myproj.core/hello-handler)  The  arachne.http.dsl/handler  function looks very much like the  arachne.core.dsl/component  function we used earlier. This is no accident! In fact,  handler  is actually defining a component, too: just a specific kind of component. The difference is that the function specified should identify a handler function (the one we just wrote) instead of being a constructor that can return an arbitrary object. Note that we still need to give our handler component a name:  :myproj/hello . We'll need to refer to this in the next step.  Next, we will add some DSL forms that define a HTTP server, and tell it how to serve our handler function:  (require '[arachne.pedestal.dsl :as p])\n\n(p/server :myproj/server 8080\n\n  (h/endpoint :get  /  :myproj/hello)\n\n  )  The  arachne.pedestal.dsl/server  form creates yet another component entity named  :myproj/server . Instead of passing a symbol that identifies a constructor or a handler function,  server  requires a port.  \nSee the pattern? Most Arachne DSL functions that define a component entity take the Arachne ID of the component as their first argument, and then other functions can refer to that ID to connect components together.  Nested  inside  the server element, we declare a HTTP endpoint, using the  arachne.http.dsl/endpoint  function. This function takes three arguments:   The HTTP method that this endpoint responds to, as a Clojure keyword. You may also pass a set of keywords if the endpoint can respond to multiple request types.  The route to which to \"attach\" the endpoint: requests to this route will be delegated to the endpoint.  The Arachne ID of the endpoint itself. This is a reference to the handler endpoint we declared above.   In general, this is how an Arachne applications always define their routing structure: A  server  DSL form, with nested forms for all the endpoints inside.  Again, it cannot be emphasized enough: these DSL forms do not create an actual Pedestal server. They create entities in the config that define the server. No server is actually started, and no ports will be opened until we use this config to initialize a runtime and call  start .  There's just one more step: we need to tell Arachne that this HTTP server is part of our runtime, and should be started when the runtime starts. Replace the existing  a/runtime  call with:  (a/runtime :myproj/runtime [:myproj/server])  At this point, your full configuration script should look something like this:  (require '[arachne.core.dsl :as a])\n(require '[arachne.http.dsl :as h])\n(require '[arachne.pedestal.dsl :as p])\n\n(a/component :myproj/widget-1 'myproj.core/make-widget)\n\n(a/runtime :myproj/runtime [:myproj/server])\n\n(h/handler :myproj/hello 'myproj.core/hello-handler)\n\n(p/server :myproj/server 8080\n\n  (h/endpoint :get  /  :myproj/hello)\n\n  )", 
+            "title": "Server configuraton"
+        }, 
+        {
+            "location": "/tutorials/http-requests/#running-the-server", 
+            "text": "At this point, we can start a runtime. But before we do, we should configure Logback to log a little bit less verbosely. If no  logback.xml  file is supplied, the default log level is  DEBUG , and Pedestal dumps a  lot  of debug messages. Copy and paste the following  logback.xml  file into your  resources  directory to set a default log level of  INFO  and cut down on the noise:  configuration debug= false \n\n    - appender name= STDOUT  class= ch.qos.logback.core.ConsoleAppender \n         encoder \n             pattern %d{HH:mm:ss.SSS} %-5level - %logger{36} %msg%n /pattern \n         /encoder \n     /appender \n\n     root level= INFO \n       appender-ref ref= STDOUT / \n     /root  /configuration   Then, once logging is set up, we can run the server. Here, we'll use the command line (for simplicity), though of course you could use a REPL as described in the  creating a project  tutorial.  lein run :myproj/app :myproj/runtime  You should see log output indicating that the server has started.  Hit the  http://localhost:8080/  URL to see your endpoint in action!", 
+            "title": "Running the server"
+        }, 
+        {
+            "location": "/tutorials/http-requests/#path-params", 
+            "text": "You aren't limited to specific, hardcoded routes. Arachne (via Pedestal) also allows you to use a semicolon in a route name to create a  path parameter . Values at that path are then available in the request, in a map under the  :path-params  key.  Let's try it out with a new handler function:  (defn greeter\n  [req]\n  (let [name (get-in req [:path-params :name])]\n    {:status 200\n     :body (if (empty? name)\n              Who's there!? \n             (str  Hello,   name  ! ))}))  And the corresponding line in the configuration script, inside our server:  (h/endpoint :get  /greet/:name  (h/handler 'myproj.core/greeter))  The  :name  key in the path indicates that any value at that URL should be bound to the  :name  key in the request's  :path-params .  You may also notice that we've defined the endpoint in a different way than we did before. Instead of giving the handler component an Arachne ID and then referencing it by ID, we defined it anonymously and inline, declaring it  inside  the  h/endpoint  form.  That works fine! Arachne DSL functions which define components (including  arachne.core.dsl/component ,  arachne.http.dsl/handler  and  arachne.pedestal.dsl/server , that we've seen so far) all return the entity ID of their newly created config entity, in the context configuration. And DSL forms which reference another component (such as  arachne.http.dsl/endpoint ) can accept either an Arachne ID,  or  an entity ID as a component identifier.  This means that the following three forms are equivalent:  (h/endpoint :get  /greet/:name  (h/handler 'myproj.core/greeter))  (def handler-eid (h/handler 'myproj.core/greeter))\n(h/endpoint :get  /greet/:name  handler-eid)  (h/handler :myproj/greeter 'myproj.core/greeter)\n(h/endpoint :get  /greet/:name  :myproj/greeter)  And, of course, we could both define a handler inline  and  give it an Arachne ID:  (h/endpoint :get  /greet/:name  (h/handler :myproj/greeter 'myproj.core/greeter))  You can use whichever of these variations leads to the cleanest and most readable config scripts.  Do note, though, that if you don't give a component an Arachne ID, and you don't capture the return value of the DSL function, you've just created a component entity that you have no ability to refer to, which will be pretty useless to you.", 
+            "title": "Path params"
+        }, 
+        {
+            "location": "/tutorials/http-requests/#components-and-the-runtime", 
+            "text": "If you were looking for it, you might also have noticed that we're not getting the \"Hello World\" message from our Widget component, which we built in the last tutorial. That's because when we edited our  (a/runtime)  form to include  :myproj/server  instead of  :myproj/widget-1 , we removed all references to the widget from the components we told Arachne to start. Because nothing was depending on it, it was neither instantiated nor started with the rest of the System.  If we did want to have our custom component to start up, we can add it to the runtime, along with our HTTP server, like so:  (a/runtime :myproj/runtime [:myproj/server :myproj/widget-1])  Now, our custom component will start up alongside the server itself.  For much more on components and component dependencies, see the next tutorial on  dependency injection .", 
+            "title": "Components and the runtime"
         }, 
         {
             "location": "/tutorials/dependency-injection/", 
-            "text": "Components and Dependency Injection\n\n\nTodo: write me", 
+            "text": "Components and Dependency Injection\n\n\nThe code for this is ready to use, we're just waiting on the documentation. Coming soon!", 
             "title": "Dependency Injection"
         }, 
         {
             "location": "/tutorials/dependency-injection/#components-and-dependency-injection", 
-            "text": "Todo: write me", 
+            "text": "The code for this is ready to use, we're just waiting on the documentation. Coming soon!", 
             "title": "Components and Dependency Injection"
         }, 
         {
             "location": "/tutorials/serving-assets/", 
-            "text": "Serving Static Assets\n\n\nTodo: write me", 
+            "text": "Serving Static Assets\n\n\nThe code for this is ready to use, we're just waiting on the documentation. Coming soon!", 
             "title": "Static Assets"
         }, 
         {
             "location": "/tutorials/serving-assets/#serving-static-assets", 
-            "text": "Todo: write me", 
+            "text": "The code for this is ready to use, we're just waiting on the documentation. Coming soon!", 
             "title": "Serving Static Assets"
         }, 
         {
             "location": "/tutorials/interceptors/", 
-            "text": "Using Interceptors\n\n\nTodo: write me", 
+            "text": "Using Interceptors\n\n\nThe code for this is ready to use, we're just waiting on the documentation. Coming soon!", 
             "title": "Request Interceptors"
         }, 
         {
             "location": "/tutorials/interceptors/#using-interceptors", 
-            "text": "Todo: write me", 
+            "text": "The code for this is ready to use, we're just waiting on the documentation. Coming soon!", 
             "title": "Using Interceptors"
         }, 
         {
@@ -142,112 +167,112 @@
         }, 
         {
             "location": "/tutorials/figwheel/", 
-            "text": "Dynamic Development with Figwheel\n\n\nTodo: write me", 
+            "text": "Dynamic Development with Figwheel\n\n\nThe code for this is ready to use, we're just waiting on the documentation. Coming soon!", 
             "title": "Figwheel"
         }, 
         {
             "location": "/tutorials/figwheel/#dynamic-development-with-figwheel", 
-            "text": "Todo: write me", 
+            "text": "The code for this is ready to use, we're just waiting on the documentation. Coming soon!", 
             "title": "Dynamic Development with Figwheel"
         }, 
         {
-            "location": "/modules/arachne.core/", 
-            "text": "Concepts\n\n\nTodo: write me\n\n\nConfiguration\n\n\nTodo: write me", 
-            "title": "arachne.core"
+            "location": "/modules/arachne-core/", 
+            "text": "Concepts\n\n\nDocumentation coming soon\n\n\nConfiguration\n\n\nDocumentation coming soon", 
+            "title": "arachne-core"
         }, 
         {
-            "location": "/modules/arachne.core/#concepts", 
-            "text": "Todo: write me", 
+            "location": "/modules/arachne-core/#concepts", 
+            "text": "Documentation coming soon", 
             "title": "Concepts"
         }, 
         {
-            "location": "/modules/arachne.core/#configuration", 
-            "text": "Todo: write me", 
+            "location": "/modules/arachne-core/#configuration", 
+            "text": "Documentation coming soon", 
             "title": "Configuration"
         }, 
         {
-            "location": "/modules/arachne.http/", 
-            "text": "Concepts\n\n\nTodo: write me\n\n\nConfiguration\n\n\nTodo: write me", 
-            "title": "arachne.http"
+            "location": "/modules/arachne-http/", 
+            "text": "Concepts\n\n\nDocumentation coming soon\n\n\nConfiguration\n\n\nDocumentation coming soon", 
+            "title": "arachne-http"
         }, 
         {
-            "location": "/modules/arachne.http/#concepts", 
-            "text": "Todo: write me", 
+            "location": "/modules/arachne-http/#concepts", 
+            "text": "Documentation coming soon", 
             "title": "Concepts"
         }, 
         {
-            "location": "/modules/arachne.http/#configuration", 
-            "text": "Todo: write me", 
+            "location": "/modules/arachne-http/#configuration", 
+            "text": "Documentation coming soon", 
             "title": "Configuration"
         }, 
         {
-            "location": "/modules/arachne.pedestal/", 
-            "text": "Concepts\n\n\nTodo: write me\n\n\nConfiguration\n\n\nTodo: write me", 
-            "title": "arachne.pedestal"
+            "location": "/modules/arachne-pedestal/", 
+            "text": "Concepts\n\n\nDocumentation coming soon\n\n\nConfiguration\n\n\nDocumentation coming soon", 
+            "title": "arachne-pedestal"
         }, 
         {
-            "location": "/modules/arachne.pedestal/#concepts", 
-            "text": "Todo: write me", 
+            "location": "/modules/arachne-pedestal/#concepts", 
+            "text": "Documentation coming soon", 
             "title": "Concepts"
         }, 
         {
-            "location": "/modules/arachne.pedestal/#configuration", 
-            "text": "Todo: write me", 
+            "location": "/modules/arachne-pedestal/#configuration", 
+            "text": "Documentation coming soon", 
             "title": "Configuration"
         }, 
         {
-            "location": "/modules/arachne.assets/", 
-            "text": "Concepts\n\n\nTodo: write me\n\n\nConfiguration\n\n\nTodo: write me", 
-            "title": "arachne.assets"
+            "location": "/modules/arachne-assets/", 
+            "text": "Concepts\n\n\nDocumentation coming soon\n\n\nConfiguration\n\n\nDocumentation coming soon", 
+            "title": "arachne-assets"
         }, 
         {
-            "location": "/modules/arachne.assets/#concepts", 
-            "text": "Todo: write me", 
+            "location": "/modules/arachne-assets/#concepts", 
+            "text": "Documentation coming soon", 
             "title": "Concepts"
         }, 
         {
-            "location": "/modules/arachne.assets/#configuration", 
-            "text": "Todo: write me", 
+            "location": "/modules/arachne-assets/#configuration", 
+            "text": "Documentation coming soon", 
             "title": "Configuration"
         }, 
         {
-            "location": "/modules/arachne.cljs/", 
-            "text": "Concepts\n\n\nTodo: write me\n\n\nConfiguration\n\n\nTodo: write me", 
-            "title": "arachne.cljs"
+            "location": "/modules/arachne-cljs/", 
+            "text": "Concepts\n\n\nDocumentation coming soon\n\n\nConfiguration\n\n\nDocumentation coming soon", 
+            "title": "arachne-cljs"
         }, 
         {
-            "location": "/modules/arachne.cljs/#concepts", 
-            "text": "Todo: write me", 
+            "location": "/modules/arachne-cljs/#concepts", 
+            "text": "Documentation coming soon", 
             "title": "Concepts"
         }, 
         {
-            "location": "/modules/arachne.cljs/#configuration", 
-            "text": "Todo: write me", 
+            "location": "/modules/arachne-cljs/#configuration", 
+            "text": "Documentation coming soon", 
             "title": "Configuration"
         }, 
         {
-            "location": "/modules/arachne.figwheel/", 
-            "text": "Concepts\n\n\nTodo: write me\n\n\nConfiguration\n\n\nTodo: write me", 
-            "title": "arachne.figwheel"
+            "location": "/modules/arachne-figwheel/", 
+            "text": "Concepts\n\n\nDocumentation coming soon\n\n\nConfiguration\n\n\nDocumentation coming soon", 
+            "title": "arachne-figwheel"
         }, 
         {
-            "location": "/modules/arachne.figwheel/#concepts", 
-            "text": "Todo: write me", 
+            "location": "/modules/arachne-figwheel/#concepts", 
+            "text": "Documentation coming soon", 
             "title": "Concepts"
         }, 
         {
-            "location": "/modules/arachne.figwheel/#configuration", 
-            "text": "Todo: write me", 
+            "location": "/modules/arachne-figwheel/#configuration", 
+            "text": "Documentation coming soon", 
             "title": "Configuration"
         }, 
         {
             "location": "/contributing/", 
-            "text": "Contributor's Guide\n\n\nComing soon", 
+            "text": "Contributor's Guide\n\n\nComing soon!", 
             "title": "Contributing"
         }, 
         {
             "location": "/contributing/#contributors-guide", 
-            "text": "Coming soon", 
+            "text": "Coming soon!", 
             "title": "Contributor's Guide"
         }, 
         {

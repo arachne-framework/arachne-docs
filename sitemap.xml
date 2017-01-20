@@ -66,37 +66,37 @@
     
         
     <url>
-     <loc>http://docs.arachne-framework.org/modules/arachne.core/</loc>
+     <loc>http://docs.arachne-framework.org/modules/arachne-core/</loc>
      <lastmod>2017-01-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>http://docs.arachne-framework.org/modules/arachne.http/</loc>
+     <loc>http://docs.arachne-framework.org/modules/arachne-http/</loc>
      <lastmod>2017-01-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>http://docs.arachne-framework.org/modules/arachne.pedestal/</loc>
+     <loc>http://docs.arachne-framework.org/modules/arachne-pedestal/</loc>
      <lastmod>2017-01-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>http://docs.arachne-framework.org/modules/arachne.assets/</loc>
+     <loc>http://docs.arachne-framework.org/modules/arachne-assets/</loc>
      <lastmod>2017-01-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>http://docs.arachne-framework.org/modules/arachne.cljs/</loc>
+     <loc>http://docs.arachne-framework.org/modules/arachne-cljs/</loc>
      <lastmod>2017-01-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>http://docs.arachne-framework.org/modules/arachne.figwheel/</loc>
+     <loc>http://docs.arachne-framework.org/modules/arachne-figwheel/</loc>
      <lastmod>2017-01-20</lastmod>
      <changefreq>daily</changefreq>
     </url>

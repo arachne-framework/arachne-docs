@@ -80,7 +80,22 @@
         
             <ul>
             
-                <li class="toctree-l3"><a href="#handling-http-requests">Handling HTTP Requests</a></li>
+                <li class="toctree-l3"><a href="#enabling-the-pedestal-module">Enabling the Pedestal module</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#writing-a-handler-function">Writing a handler function</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#server-configuraton">Server configuraton</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#running-the-server">Running the server</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#path-params">Path params</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#components-and-the-runtime">Components and the runtime</a></li>
                 
             
             </ul>
@@ -133,42 +148,42 @@
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../modules/arachne.core/">arachne.core</a>
+        <a class="" href="../../modules/arachne-core/">arachne-core</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../modules/arachne.http/">arachne.http</a>
+        <a class="" href="../../modules/arachne-http/">arachne-http</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../modules/arachne.pedestal/">arachne.pedestal</a>
+        <a class="" href="../../modules/arachne-pedestal/">arachne-pedestal</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../modules/arachne.assets/">arachne.assets</a>
+        <a class="" href="../../modules/arachne-assets/">arachne-assets</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../modules/arachne.cljs/">arachne.cljs</a>
+        <a class="" href="../../modules/arachne-cljs/">arachne-cljs</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../modules/arachne.figwheel/">arachne.figwheel</a>
+        <a class="" href="../../modules/arachne-figwheel/">arachne-figwheel</a>
         
     </li>
 
@@ -229,8 +244,165 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="handling-http-requests">Handling HTTP Requests</h1>
-<p>Todo: write me</p>
+                <h1>Handling HTTP Requests</h1>
+
+<p>This tutorial extends the project started in the <a href="../creating-a-project/">getting started tutorial</a> and adds the Pedestal module. It shows how to define and start a HTTP server, and handle incoming HTTP requests using custom handlers functions.</p>
+<p>You can find the complete source code used in this tutorial on <a href="https://github.com/arachne-framework/arachne-docs/tree/master/tutorial-code/http-requests">Github</a>.</p>
+<p>To make the most of this particular tutorial, you will be most effective if you have already read and understood the material in the <a href="../creating-a-project/">getting started tutorial</a></p>
+<h3 id="enabling-the-pedestal-module">Enabling the Pedestal module</h3>
+<p>To make our application into an HTTP server, we'll need add the <a href="../../modules/arachne-pedestal/">arachne-pedestal</a> Arachne module to our app. <a href="http://pedestal.io">Pedestal</a> is an industrial strength HTTP server for Clojure, and Arachne wraps it, inheriting the benefits that it provides.</p>
+<aside>
+<p>The <code>arachne-pedestal</code> module uses Pedestal, as do many of Arachne's official modules, because we needed to pick <i>some</i> http server and Pedestal fit the bill nicely. However, there's nothing about Arachne itself that requires Pedestal; in theory you could also (for example) build an "arachne-ring" module to fill the same role. Most of Arachne's container-agnostic HTTP concepts and handling code is already pulled out into a separate <code>arachne-http</code> module (which <code>arachne-pedestal</code> depends on) and could be freely reused.</p>
+<p>Of course, any modules that depend on <code>arachne-pedestal</code> would then also need to be modified, or alternatives created.</p>
+</aside>
+
+<p>First, we'll need to add a Leiningen dependency, to make sure <code>arachne-pedestal</code> is on our classpath. Because <code>arachne-pedestal</code> ultimately depends on <code>arachne-core</code> as well, we can actually <em>replace</em> <code>arachne-core</code> in the <code>project.clj</code>: it will still be required.</p>
+<p>After adding it, your leiningen dependencies should look something like this:</p>
+<pre><code class="clojure">:dependencies [[org.clojure/clojure &quot;1.9.0-alpha14&quot;]
+               [org.arachne-framework/arachne-pedestal &quot;0.1.0-master-0036-59ecd65&quot;]
+               [datascript &quot;0.15.5&quot;]
+               [ch.qos.logback/logback-classic &quot;1.1.3&quot;]]
+</code></pre>
+
+<p>Then, we need to update the <code>arachne.edn</code> file to indicate that our application should activate the Pedestal module. Just like <code>project.clj</code>, we can actually replace the core module; because the Pedestal depends on it transitively, we no longer need depend on it explicitly.</p>
+<pre><code class="clojure">[{:arachne/name :myproj/app
+  :arachne/inits [&quot;config/myproj.clj&quot;]
+  :arachne/dependencies [:org.arachne-framework/arachne-pedestal]}]
+</code></pre>
+
+<h3 id="writing-a-handler-function">Writing a handler function</h3>
+<p>In Arachne (and Pedestal) (and Ring), a handler function is a function which takes a request as its argument, and returns a response. Both the request and the response are represented as Clojure maps.</p>
+<p>Below is what is possibly the simplest possible handler function. We will add it to our app, in <code>src/myproj/core.clj</code>:</p>
+<pre><code class="clojure">(defn hello-handler
+  [req]
+  {:status 200
+   :body &quot;Hello, world!&quot;})
+</code></pre>
+
+<p>This function just responds with <code>"Hello, world!"</code> to any incoming request. Easy enough!</p>
+<p>This is literally all of the project code we need to write to turn our application into a web application. Everything else will be defined in the Arachne configuration.</p>
+<h3 id="server-configuraton">Server configuraton</h3>
+<p>Now, for the interesting part: updating the config script to start a HTTP server serving up our handler.</p>
+<p>First, we will need to define a Component representing our handler function. Add the following to your config script:</p>
+<pre><code>(require '[arachne.http.dsl :as h])
+
+(h/handler :myproj/hello 'myproj.core/hello-handler)
+</code></pre>
+
+<p>The <code>arachne.http.dsl/handler</code> function looks very much like the <code>arachne.core.dsl/component</code> function we used earlier. This is no accident! In fact, <code>handler</code> is actually defining a component, too: just a specific kind of component. The difference is that the function specified should identify a handler function (the one we just wrote) instead of being a constructor that can return an arbitrary object. Note that we still need to give our handler component a name: <code>:myproj/hello</code>. We'll need to refer to this in the next step.</p>
+<p>Next, we will add some DSL forms that define a HTTP server, and tell it how to serve our handler function:</p>
+<pre><code class="clojure">(require '[arachne.pedestal.dsl :as p])
+
+(p/server :myproj/server 8080
+
+  (h/endpoint :get &quot;/&quot; :myproj/hello)
+
+  )
+</code></pre>
+
+<p>The <code>arachne.pedestal.dsl/server</code> form creates yet another component entity named <code>:myproj/server</code>. Instead of passing a symbol that identifies a constructor or a handler function, <code>server</code> requires a port.</p>
+<aside>
+See the pattern? Most Arachne DSL functions that define a component entity take the Arachne ID of the component as their first argument, and then other functions can refer to that ID to connect components together.
+</aside>
+
+<p>Nested <em>inside</em> the server element, we declare a HTTP endpoint, using the <code>arachne.http.dsl/endpoint</code> function. This function takes three arguments:</p>
+<ul>
+<li>The HTTP method that this endpoint responds to, as a Clojure keyword. You may also pass a set of keywords if the endpoint can respond to multiple request types.</li>
+<li>The route to which to "attach" the endpoint: requests to this route will be delegated to the endpoint.</li>
+<li>The Arachne ID of the endpoint itself. This is a reference to the handler endpoint we declared above.</li>
+</ul>
+<p>In general, this is how an Arachne applications always define their routing structure: A <code>server</code> DSL form, with nested forms for all the endpoints inside.</p>
+<p>Again, it cannot be emphasized enough: these DSL forms do not create an actual Pedestal server. They create entities in the config that define the server. No server is actually started, and no ports will be opened until we use this config to initialize a runtime and call <code>start</code>.</p>
+<p>There's just one more step: we need to tell Arachne that this HTTP server is part of our runtime, and should be started when the runtime starts. Replace the existing <code>a/runtime</code> call with:</p>
+<pre><code class="clojure">(a/runtime :myproj/runtime [:myproj/server])
+</code></pre>
+
+<p>At this point, your full configuration script should look something like this:</p>
+<pre><code class="clojure">(require '[arachne.core.dsl :as a])
+(require '[arachne.http.dsl :as h])
+(require '[arachne.pedestal.dsl :as p])
+
+(a/component :myproj/widget-1 'myproj.core/make-widget)
+
+(a/runtime :myproj/runtime [:myproj/server])
+
+(h/handler :myproj/hello 'myproj.core/hello-handler)
+
+(p/server :myproj/server 8080
+
+  (h/endpoint :get &quot;/&quot; :myproj/hello)
+
+  )
+</code></pre>
+
+<h3 id="running-the-server">Running the server</h3>
+<p>At this point, we can start a runtime. But before we do, we should configure Logback to log a little bit less verbosely. If no <code>logback.xml</code> file is supplied, the default log level is <code>DEBUG</code>, and Pedestal dumps a <em>lot</em> of debug messages. Copy and paste the following <code>logback.xml</code> file into your <code>resources</code> directory to set a default log level of <code>INFO</code> and cut down on the noise:</p>
+<pre><code class="xml">&lt;configuration debug=&quot;false&quot;&gt;
+
+    -&lt;appender name=&quot;STDOUT&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;
+        &lt;encoder&gt;
+            &lt;pattern&gt;%d{HH:mm:ss.SSS} %-5level - %logger{36} %msg%n&lt;/pattern&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+
+    &lt;root level=&quot;INFO&quot;&gt;
+      &lt;appender-ref ref=&quot;STDOUT&quot;/&gt;
+    &lt;/root&gt;
+
+&lt;/configuration&gt;
+</code></pre>
+
+<p>Then, once logging is set up, we can run the server. Here, we'll use the command line (for simplicity), though of course you could use a REPL as described in the <a href="../creating-a-project/">creating a project</a> tutorial.</p>
+<pre><code>lein run :myproj/app :myproj/runtime
+</code></pre>
+
+<p>You should see log output indicating that the server has started.</p>
+<p>Hit the <code>http://localhost:8080/</code> URL to see your endpoint in action!</p>
+<h3 id="path-params">Path params</h3>
+<p>You aren't limited to specific, hardcoded routes. Arachne (via Pedestal) also allows you to use a semicolon in a route name to create a <em>path parameter</em>. Values at that path are then available in the request, in a map under the <code>:path-params</code> key.</p>
+<p>Let's try it out with a new handler function:</p>
+<pre><code class="clojure">(defn greeter
+  [req]
+  (let [name (get-in req [:path-params :name])]
+    {:status 200
+     :body (if (empty? name)
+             &quot;Who's there!?&quot;
+             (str &quot;Hello, &quot; name &quot;!&quot;))}))
+</code></pre>
+
+<p>And the corresponding line in the configuration script, inside our server:</p>
+<pre><code class="clojure">(h/endpoint :get &quot;/greet/:name&quot; (h/handler 'myproj.core/greeter))
+</code></pre>
+
+<p>The <code>:name</code> key in the path indicates that any value at that URL should be bound to the <code>:name</code> key in the request's <code>:path-params</code>.</p>
+<p>You may also notice that we've defined the endpoint in a different way than we did before. Instead of giving the handler component an Arachne ID and then referencing it by ID, we defined it anonymously and inline, declaring it <em>inside</em> the <code>h/endpoint</code> form.</p>
+<p>That works fine! Arachne DSL functions which define components (including <code>arachne.core.dsl/component</code>, <code>arachne.http.dsl/handler</code> and <code>arachne.pedestal.dsl/server</code>, that we've seen so far) all return the entity ID of their newly created config entity, in the context configuration. And DSL forms which reference another component (such as <code>arachne.http.dsl/endpoint</code>) can accept either an Arachne ID, <em>or</em> an entity ID as a component identifier.</p>
+<p>This means that the following three forms are equivalent:</p>
+<pre><code class="clojure">(h/endpoint :get &quot;/greet/:name&quot; (h/handler 'myproj.core/greeter))
+</code></pre>
+
+<pre><code class="clojure">(def handler-eid (h/handler 'myproj.core/greeter))
+(h/endpoint :get &quot;/greet/:name&quot; handler-eid)
+</code></pre>
+
+<pre><code class="clojure">(h/handler :myproj/greeter 'myproj.core/greeter)
+(h/endpoint :get &quot;/greet/:name&quot; :myproj/greeter)
+</code></pre>
+
+<p>And, of course, we could both define a handler inline <em>and</em> give it an Arachne ID:</p>
+<pre><code class="clojure">(h/endpoint :get &quot;/greet/:name&quot; (h/handler :myproj/greeter 'myproj.core/greeter))
+</code></pre>
+
+<p>You can use whichever of these variations leads to the cleanest and most readable config scripts.</p>
+<p>Do note, though, that if you don't give a component an Arachne ID, and you don't capture the return value of the DSL function, you've just created a component entity that you have no ability to refer to, which will be pretty useless to you.</p>
+<h3 id="components-and-the-runtime">Components and the runtime</h3>
+<p>If you were looking for it, you might also have noticed that we're not getting the "Hello World" message from our Widget component, which we built in the last tutorial. That's because when we edited our <code>(a/runtime)</code> form to include <code>:myproj/server</code> instead of <code>:myproj/widget-1</code>, we removed all references to the widget from the components we told Arachne to start. Because nothing was depending on it, it was neither instantiated nor started with the rest of the System.</p>
+<p>If we did want to have our custom component to start up, we can add it to the runtime, along with our HTTP server, like so:</p>
+<pre><code>(a/runtime :myproj/runtime [:myproj/server :myproj/widget-1])
+</code></pre>
+
+<p>Now, our custom component will start up alongside the server itself.</p>
+<p>For much more on components and component dependencies, see the next tutorial on <a href="../dependency-injection/">dependency injection</a>.</p>
               
             </div>
           </div>
