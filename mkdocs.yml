@@ -23,5 +23,6 @@ pages:
         - 'arachne.cljs': modules/arachne.cljs.md
         - 'arachne.figwheel': modules/arachne.figwheel.md
     - Contributing: contributing.md
+    - API Documentation: api
 
 

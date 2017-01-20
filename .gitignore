@@ -1,2 +1,4 @@
 .idea
 /site
+/docs/api/*
+api-doc-generator/target/*
