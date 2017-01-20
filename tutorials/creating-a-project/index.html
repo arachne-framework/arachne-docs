@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Creating a Project - Arachne Web Framework</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+  <link href="../../api-override.css" rel="stylesheet">
+  <link href="../../extra.css" rel="stylesheet">
+  <link href="../../api/css/default.css" rel="stylesheet">
+  <link href="../../api/css/highlight.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Creating a Project";
+    var mkdocs_page_input_path = "tutorials/creating-a-project.md";
+    var mkdocs_page_url = "/tutorials/creating-a-project/";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Arachne Web Framework</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../architecture/">Architectural Overview</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Tutorials</span></li>
+
+        
+            
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Creating a Project</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#creating-the-project">Creating the project</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#writing-a-component">Writing a component</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#writing-a-configuration-script">Writing a configuration script</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#application-metadata">Application metadata</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#running-the-application">Running the application</a></li>
+                
+                    <li><a class="toctree-l4" href="#running-from-the-repl">Running from the REPL</a></li>
+                
+                    <li><a class="toctree-l4" href="#running-from-the-command-line">Running from the command line</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#error-reporting">Error reporting</a></li>
+                
+            
+            </ul>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../http-requests/">Handling HTTP Requests</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../dependency-injection/">Dependency Injection</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../serving-assets/">Static Assets</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../interceptors/">Request Interceptors</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cljs/">ClojureSript</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../figwheel/">Figwheel</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Modules</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../modules/arachne.core/">arachne.core</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../modules/arachne.http/">arachne.http</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../modules/arachne.pedestal/">arachne.pedestal</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../modules/arachne.assets/">arachne.assets</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../modules/arachne.cljs/">arachne.cljs</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../modules/arachne.figwheel/">arachne.figwheel</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../contributing/">Contributing</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../api/">API Documentation</a>
+        
+    </li>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Arachne Web Framework</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Tutorials &raquo;</li>
+        
+      
+    
+    <li>Creating a Project</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/arachne-framework/edit/master/docs/tutorials/creating-a-project.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1>Creating an Arachne Project</h1>
+
+<p>This in-depth tutorial describes how to create a simple Arachne project from scratch, explaining everything as it goes. You can find the complete source code used in this tutorial on <a href="https://github.com/arachne-framework/arachne-docs/tree/master/tutorial-code/creating-a-project">Github</a>.</p>
+<aside>
+In practice, you will probably want to start new Arachne projects by cloning an existing template app. However, when learning Arachne, it is instructive to go through this excercise and create each part piece by piece, to gain an understanding of what the parts are and how they work together.
+</aside>
+
+<p>To make the most of this particular tutorial, you will be most effective if you already:</p>
+<ul>
+<li>Have a basic knowledge of the Clojure language</li>
+<li>Are comfortable with Clojure protocols and records</li>
+<li>Have a Clojure editing environment that you are happy with. You should be able to launch a REPL, create Clojure source files, and evaluate forms from your source files in your REPL.</li>
+</ul>
+<h3 id="creating-the-project">Creating the project</h3>
+<p>For this tutorial, we'll use <a href="http://leiningen.org">leiningen</a> to assemble our dependencies and launch a JVM.</p>
+<aside>
+Of course, you can also use Arachne with <a href="http://boot-clj.com/">boot</a> or any other Clojure build tool. We simply use lein for this tutorial since it's the most familiar to the most people.
+</aside>
+
+<p>First, let's create a new lein project. At the command line, navigate to a directory of your choice and type <code>lein new myproj</code>. This will create a directory called <code>myproj</code> containing a <code>project.clj</code> file and several stubbed source and test files.</p>
+<p>For this tutorial, we will not be using the <code>/test</code>, <code>/doc</code>, <code>README.md</code>, <code>LICENSE</code> or <code>CHANGELOG.md</code> files, so we will delete them to keep things crystal clear.</p>
+<p>After this step, your directory structure should be as follows:</p>
+<pre><code>myproj
+├── project.clj
+├── resources
+└── src
+    └── myproj
+        └── core.clj
+</code></pre>
+
+<p>Edit the <code>project.clj</code> file to contain the following contents:</p>
+<pre><code class="clojure">(defproject myproj &quot;0.1.0-SNAPSHOT&quot;
+  :dependencies [[org.clojure/clojure &quot;1.9.0-alpha14&quot;]
+                 [org.arachne-framework/arachne-core &quot;0.1.0-master-0081-0ab2073&quot;]
+                 [datascript &quot;0.15.5&quot;]
+                 [ch.qos.logback/logback-classic &quot;1.1.3&quot;]]
+  :repositories [[&quot;arachne-dev&quot;
+                  &quot;http://maven.arachne-framework.org/artifactory/arachne-dev&quot;]])
+</code></pre>
+
+<p>You can just cut and paste for now, but if you're curious about what any of this means:</p>
+<ul>
+<li>Arachne leverages the new <code>clojure.spec</code> library heavily, and therefore requires the latest alpha of Clojure 1.9</li>
+<li>The version number for Arachne looks funky. WTF is <code>0.1.0-master-0081-0ab2073</code> supposed to mean? Well, instead of using SNAPSHOT builds that are effectively mutable and can change underneath you, Arachne's dev builds are named with the following format: <code>&lt;semver&gt;-&lt;branch&gt;-&lt;commit-idx&gt;-&lt;commit-sha&gt;</code>. This guarantees that there is a unique version number for each dev build, and you can compare any two versions by looking at the commit-idx: we know that <code>0081</code> is newere than <code>0080</code> and older than <code>0082</code>. Eventually, we'll move to regular release versions, but for now working with dev builds is the best way to stay up-to-date.</li>
+<li>We've included DataScript on the classpath, but we also could have used <a href="http://www.datomic.com/get-datomic.html">Datomic</a> or <a href="https://my.datomic.com/downloads/free">Datomic Free</a>. Arachne will detect which one is on your classpath and use whatever is present (there is also a way to specify explicitly which to use, if your project includes both Datomic and Datascript.)</li>
+<li>Logging is provided by SLF4J, which is compatible with the logging used by most Clojure products (such as Datomic itself.) We can use any concrete logger that supports SLF4J. Logback is merely a common choice.</li>
+<li>We need to add the <code>arachne-dev</code> repository explicitly, since Arachne is not yet deployed into Clojars or any other public maven repository.</li>
+</ul>
+<h3 id="writing-a-component">Writing a component</h3>
+<p>Arachne uses Stuart Sierra's "Component" library as the foundation of its runtime system. Component defines a the concept of a "component" (often called a "SierraComponent"), which is a (possibly stateful) object that can be started and stopped, as part of a larger system. SierraComponents can also have dependencies on eachother: more on that in the tutorial on <a href="../dependency-injection/">dependency injection</a>.</p>
+<p>To get started with the simplest possible Arachne application, we need to do two things:</p>
+<ul>
+<li>Create a SierraComponent that our system will use</li>
+<li>Define a function which, when called, will return an instance of our component (a "constructor" function, in Arachne parlance)</li>
+</ul>
+<p>First, let's pop open <code>src/myproj/core.clj</code> and define a component (after requiring a couple namespaces):</p>
+<pre><code class="clojure">(ns myproj.core
+  (:require [com.stuartsierra.component :as c]
+            [arachne.log :as log]))
+
+(defrecord Widget []
+  c/Lifecycle
+  (start [this]
+    (log/info :msg &quot;Hello, world!&quot;)
+    this)
+  (stop [this]
+    (log/info :msg &quot;Goodnight!&quot;)
+    this))
+</code></pre>
+
+<p>This is pretty straightforward; this code simply defines a component that satisfies Component's <code>Lifecycle</code> protocol, and logs out a simple message when it is started and stopped, using Arachne's logging utility library.</p>
+<p>If you want, at this point, you can verify that your component is working as expected using the REPL:</p>
+<pre><code class="clojure">(def w (-&gt;Widget))
+;;=&gt; #'myproj.core/w
+(c/start w)
+;;=&gt; #myproj.core.Widget{}
+21:29:50.867 [nREPL-worker-5] INFO  myproj.core - {:msg &quot;Hello, world!&quot;, :line nil}
+</code></pre>
+
+<p>Now, all that's left is to define a constructor that, when invoked, will return an (unstarted) instance of our SierraComponent, fresh and ready to use:</p>
+<pre><code>(defn make-widget
+  &quot;Constructor for a Widget&quot;
+  []
+  (-&gt;Widget))
+</code></pre>
+
+<p>Great! We're done here. Save the file and let's move on to the next step: creating an Arachne configuration.</p>
+<h3 id="writing-a-configuration-script">Writing a configuration script</h3>
+<p>What is an Arachne configuration? Well, it's data that specifies everything about our application that can possibly be specified using data. And it's all in a database. Under the hood, our configuration is stored in a full-fledged, queryable Datomic (or DataScript) database, which makes it extremely powerful for modules to query and update under the hood.</p>
+<p>But, building a configuration by directly creating a Datomic database is awkward. It isn't hard, but it's verbose, and not very readable. And since the configuration is what defines the basic structure of our application, we want it to be <em>super</em> readable.</p>
+<p>So Arachne provides a DSL (domain specific language) oriented specifically towards writing configuration data. Instead of writing a database, you can just write a <em>config script</em>, and when the config script is executed, it will populate the config database with everything it needs.</p>
+<p>So what does a config script look like? For our very simple app, it looks like this:</p>
+<pre><code class="clojure">(require '[arachne.core.dsl :as a])
+
+(a/component :myproj/widget-1 'myproj.core/make-widget)
+
+(a/runtime :myproj/runtime [:myproj/widget-1])
+</code></pre>
+
+<p>Save this to a file called <code>config/myproj.clj</code> in your project directory.</p>
+<p>There are two things worth unpacking here, before we dive into what these forms mean.</p>
+<p>First, you will notice that the file has no namespace. That is fully intentional. It is <em>not part of your project's codebase</em>. It is a config script. No code should require it. It's not in your <code>/src</code> directory, so it isn't even on the classpath!</p>
+<p>In a very real sense, your config script is an entirely separate mini-program that has only one job: generating a config. Your <em>real</em> application will read that config and execute an application based on it. We happen to be using the same JVM for both programs, here, and using an "in memory" only config, because it's convenient. But it's theoretically possible to evaluate a config script, store the resulting config in a persistent database, shut down your computer, and then hand the config to an application and have it run at some point in the distant future.</p>
+<p>Second, you can't evaluate these forms at the REPL. Sorry. This is because each time one of these config DSL forms is evaluated, it updates the "current configuration" (stored in an atom in a dynamic var, if you're curious how that works.) If you're just in a regular old REPL, there <em>is</em> no current configuration, and so trying to call a DSL form will throw an error.</p>
+<p>With that out of the way, let's talk about what these functions do.</p>
+<p>The <code>arachne.core.dsl/component</code> function defines a component, in the configuration. The first argument (here the keyword <code>:myproj/widget-1</code>) is a unique ID for our component. Anywhere in our config where we refer to <code>:myproj/widget-1</code>, we're talking about the same entity in the configuration DB.</p>
+<p>The second argument is a quoted symbol, identifying the constructor function to use when actually creating the component instance. Understand, the config DSL function only <em>identifies</em> the constructor function; it isn't called yet! It's merely stored in the config, to be used when your app finally starts.</p>
+<p>The <code>arachne.core.dsl/component</code> function also takes an optional third argument, to specify the dependencies of the component, but we'll ignore that for now.</p>
+<p>The <code>arachne.core.dsl/runtime</code> function defines a named <em>runtime entity</em> in the application's configuration. The runtime entity groups components together and specifies which ones should be instanted when an Arachne program starts. When we actually run our program, we'll see that we have to tell Arachne which runtime we want to use, which in turn indicates the set of components that we want started.</p>
+<p>In this case we just have one runtime (named <code>:myproj/runtime</code>), which identifies our one and only component (<code>:myproj/widget-1</code>). But as applications get larger and more complex, it can be very useful to have multiple runtimes in the same config. For example, two different but related services could be defined in the same Arachne config, but have completely different runtimes, and do completely different things when started.</p>
+<h3 id="application-metadata">Application metadata</h3>
+<p>Finally, we have to tell Arachne some metadata about our application: what its name is, what modules it depends on, and where our config script is located.</p>
+<p>To do this, we need write an <code>arachne.edn</code> file, somewhere on our classpath, that contains this information. Let's put it in <code>/resources</code> for now:</p>
+<pre><code class="clojure">[{:arachne/name :myproj/app
+  :arachne/inits [&quot;config/myproj.clj&quot;]
+  :arachne/dependencies [:org.arachne-framework/arachne-core]}]
+</code></pre>
+
+<ul>
+<li><code>:arachne/name</code> is just the name of our application as a whole.</li>
+<li><code>:arachne/inits</code> is a vector of  "initializers" to use. Initializers come in many flavors (for example, you can pass in raw Datomic transactions to the config) but here, we're just going to give it the process-relative filename of the config script that we wrote in the previous section.</li>
+<li><code>:arachne/dependencies</code> specifies the module names of the Arachne modules that we want to depend on. For this rudimentary example, that's just the core module, named <code>:org.arachne-framework/arachne-core</code>. All the modules we want to use must also be on the classpath (that is, specified in our <code>project.clj</code>, which <code>arachne.core</code> is.)</li>
+</ul>
+<p>That's it! Our Arachne application is now ready to run.</p>
+<p>At this point, your project directory structure should look like this:</p>
+<pre><code>myproj
+├── config
+│   └── myproj.clj
+├── project.clj
+├── resources
+│   └── arachne.edn
+└── src
+    └── myproj
+        └── core.clj
+</code></pre>
+
+<h3 id="running-the-application">Running the application</h3>
+<p>There are two ways to run an Arachne application:</p>
+<ul>
+<li>From the REPL, as you would during development</li>
+<li>From the command line, as you might in production</li>
+</ul>
+<h4 id="running-from-the-repl">Running from the REPL</h4>
+<p>With a REPL open, start by requiring the namespaces we'll need to get things rolling:</p>
+<pre><code class="clojure">(require '[arachne.core :as arachne])
+(require '[com.stuartsierra.component :as c])
+</code></pre>
+
+<p>Then, we can build a configuration value:</p>
+<pre><code class="clojure">(def cfg (arachne/config :myproj/app))
+;; =&gt; #'user/cfg
+</code></pre>
+
+<p>Inside this seemingly simple function call, a <em>huge</em> number of things are happening under the hood.</p>
+<ol>
+<li>We pass in only the name of our application, <code>:myproj/app</code></li>
+<li>The application metadata is loaded from the <code>arachne.edn</code> file.</li>
+<li>A new config is built, using schema derived from all the modules that we depend on.</li>
+<li>Our config script is evaluated (you can put some <code>printlns</code> in it, if you like, to prove to yourself that this is the case)</li>
+<li>All the modules that we required are doing their thing, adding their own data to the config, and possibly querying and manipulating the data that we added.</li>
+</ol>
+<p>The value that is returned is a configuration object: an immutable, in-memory database.</p>
+<p>So far, we haven't actually started anything yet. To do that, we initialize a runtime using the config we just built:</p>
+<pre><code class="clojure">(def rt (arachne/runtime cfg :myproj/runtime))
+;; =&gt; #'user/rt
+</code></pre>
+
+<p>What just happened? We gave the runtime initializer the configuration we want to use, and the Arachne ID of the runtime entity, within the config (remember)? What we got back was an initialized, but unstarted Arachne runtime object.</p>
+<p>All of our constructor functions have been called (try putting a <code>println</code> in the constructor function to convince yourself that this is true), but we haven't yet called Component's <code>start</code> method on our system, so nothing's actually happened yet. '</p>
+<p>Let's run it!</p>
+<pre><code class="clojure">(def started-rt (c/start rt))
+=&gt; #'user/started-rt
+</code></pre>
+
+<p>Note that it's important to capture the result of calling <code>start</code>; we'll need it to pass to <code>stop</code> if we ever want to stop our system.</p>
+<p>In our console, we should also see two log messages:</p>
+<pre><code>22:27:18.671 [nREPL-worker-20] INFO  arachne.core.runtime - {:msg &quot;Starting Arachne runtime&quot;, :line nil}
+22:27:18.675 [nREPL-worker-20] INFO  myproj.core - {:msg &quot;Hello, world!&quot;, :line nil}
+</code></pre>
+
+<p>One is the log message that Arachne spits out when it starts; the other is the log message from our component. It worked! We now have a full (if small) Arachne system running on our machine.</p>
+<p>You can call <code>stop</code> on the runtime when you're done:</p>
+<pre><code class="clojure">(c/stop started-rt)
+22:33:23.754 [nREPL-worker-21] INFO  arachne.core.runtime - {:msg &quot;Stopping Arachne runtime&quot;, :line nil}
+22:33:23.754 [nREPL-worker-21] INFO  myproj.core - {:msg &quot;Goodnight!&quot;, :line nil}
+</code></pre>
+
+<p>There are a few gotchas to remember when doing REPL-driven development with Arachne:</p>
+<ol>
+<li>If you change anything in your config script, you'll need to stop your runtime and rebuild your config from <code>(arachne.core/config)</code>. The config that it returns is immutable, and can't be updated once it's been used to start a runtime.</li>
+<li>If you change the code you use to define your component definitions, you'll have to re-initialize your runtime to see the changes, starting from <code>(arachne.core/runtime)</code>. Changing the definition of a component won't change the instances that are referenced inside the runtime object.</li>
+</ol>
+<p>In the future, we plan to release dev tools that will watch source files and config scripts for changes and do some of these things manually, but for now it's the responsibility of users to keep track of them.</p>
+<h4 id="running-from-the-command-line">Running from the command line</h4>
+<p>Running from the command line is, fortunately, even more straightforward. Arachne defines an <code>arachne.run</code> namespace, which contains a <code>-main</code> method that can be used to easily launch an Arachne application.</p>
+<p>You can set <code>arachne.run</code> as the default <code>:main</code> namespace in leiningen by adding the following key to your <code>project.clj</code>:</p>
+<pre><code class="clojure">:main arachne.run
+</code></pre>
+
+<p>Then, you can start your Arachne application from the command line by calling <code>lein run</code> and passing it two arguments: the name of your application as defined in <code>arachne.edn</code>, and the name of the runtime you want to start as defined in your init script:</p>
+<pre><code class="bash">lein run :myproj/app :myproj/runtime
+22:46:01.744 [main] INFO  arachne.run - {:msg &quot;Launching Arachne application&quot;, :name &quot;:myproj/app&quot;, :runtime &quot;:myproj/runtime&quot;, :line nil}
+22:46:03.498 [main] INFO  arachne.core.runtime - {:msg &quot;Starting Arachne runtime&quot;, :line nil}
+22:46:03.507 [main] INFO  myproj.core - {:msg &quot;Hello, world!&quot;, :line nil}
+</code></pre>
+
+<p>You should see the same log messages, indicating that the application (including your component) has started correctly.</p>
+<p>You will need to terminate the program manually when you're done, since it won't exit by itself.</p>
+<h2 id="error-reporting">Error reporting</h2>
+<p>There is one final thing you should be aware of when developing an Arachne application: its enhanced error reporting tools.</p>
+<p>To see what happens when something goes wrong, lets tweak our config script to pass an invalid name for our component: a keyword with no namespace:</p>
+<pre><code class="clojure">(a/component :widget-1 'myproj.core/make-widget)
+</code></pre>
+
+<p>When we try to build a config based on this script, it throws an exception:</p>
+<pre><code class="clojure">(def cfg (arachne/config :myproj/app))
+;; CompilerException arachne.ArachneException: Error initializing module `:myproj/app` (type = :arachne.core.module/error-in-initializer), compiling:(form-init8542683170413574929.clj:1:10)
+</code></pre>
+
+<p>This should look quite familiar to anyone who has experience with Clojure development... in that it isn't very helpful. Of course we can obtain a bit more information with some digging...</p>
+<pre><code>(.printStackTrace *e)
+
+arachne.ArachneException: Error initializing module `:myproj/app` (type = :arachne.core.module/error-in-initializer), compiling:(form-init8542683170413574929.clj:1:10)
+    at clojure.lang.Compiler$InvokeExpr.eval(Compiler.java:3657)
+    at clojure.lang.Compiler$DefExpr.eval(Compiler.java:451)
+    at clojure.lang.Compiler.eval(Compiler.java:6983)
+
+&lt;SNIP MANY MANY LINES&gt;
+
+    at arachne.core.module$initialize$fn__5505.invoke(module.clj:161)
+    ... 48 more
+Caused by: arachne.ArachneException: Arguments to `arachne.core.dsl/component` did not conform to registered spec (type = :arachne.error/invalid-args)
+    at arachne.error$arachne_ex.invokeStatic(error.clj:132)
+    at arachne.error$arachne_ex.invoke(error.clj:123)
+    at arachne.error$assert.invokeStatic(error.clj:60)
+    at arachne.error$assert.invoke(error.clj:53)
+    at arachne.error$assert_args.invokeStatic(error.clj:73)
+    at arachne.error$assert_args.doInvoke(error.clj:66)
+    at clojure.lang.RestFn.applyTo(RestFn.java:139)
+    at clojure.core$apply.invokeStatic(core.clj:659)
+    at clojure.core$apply.invoke(core.clj:652)
+    at arachne.core.dsl$component.invokeStatic(dsl.clj:57)
+    at arachne.core.dsl$component.doInvoke(dsl.clj:57)
+    at clojure.lang.RestFn.invoke(RestFn.java:421)
+    at arachne_init_script_8334492e_a146_4e04_98ec_e1f15e1976f1$eval10065.invokeStatic(myproj.clj:3)
+    at arachne_init_script_8334492e_a146_4e04_98ec_e1f15e1976f1$eval10065.invoke(myproj.clj:3)
+    at clojure.lang.Compiler.eval(Compiler.java:6978)
+    at clojure.lang.Compiler.load(Compiler.java:7430)
+    ... 56 more
+</code></pre>
+
+<p>If you manage to read through all that, you might eventually discover something helpful: it looks like there was something wrong with the arguments to <code>arachne.core.dsl/component</code>. Fine.</p>
+<p>Fortunately, with Arachne, there is a slightly better alternative: invoke <code>(arachne.error/explain)</code>, with no arguments, at the REPL. This will produce a pretty-printed view of the last top-level exception (the onecurrently bound to <code>*e</code>, in Clojure's REPL).</p>
+<p>The output of <code>explain</code> is still extremely verbose. It still lists the full stacktrace because, well, sometimes you need that. However, it is colored and highlighted in such a way that with a bit of scrolling you will eventually see something like this:</p>
+<p><img alt="Error Screenshot" src="../error-screenshot.png" /></p>
+<p>Hopefully, you find this to be a better alternative.</p>
+<p>One of Arachne's goals is to provide good error messages, so if you find an error that is unhelpful or confusing, please consider it a bug and file an issue: we would love to get to a point where all error messages are not only clear and helpful, but illuminating on how the system as a whole is supposed to work.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../http-requests/" class="btn btn-neutral float-right" title="Handling HTTP Requests">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../../architecture/" class="btn btn-neutral" title="Architectural Overview"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+      <p>© Luke VanderHart 2017</p>
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/arachne-framework" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../../architecture/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../http-requests/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script src="../../js/theme.js"></script>
+      <script src="../../api/js/highlight.min.js"></script>
+      <script src="../../api/js/jquery.min.js"></script>
+      <script src="../../api/js/page_effects.js"></script>
+
+</body>
+</html>
