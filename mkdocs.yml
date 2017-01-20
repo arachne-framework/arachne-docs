@@ -16,12 +16,12 @@ pages:
         - 'ClojureSript': tutorials/cljs.md
         - 'Figwheel': tutorials/figwheel.md
     - Modules:
-        - 'arachne-core': modules/arachne-core.md
-        - 'arachne-http': modules/arachne-http.md
-        - 'arachne-pedestal': modules/arachne-pedestal.md
-        - 'arachne-assets': modules/arachne-assets.md
-        - 'arachne-cljs': modules/arachne-cljs.md
-        - 'arachne-figwheel': modules/arachne-figwheel.md
+        - 'arachne-core': 'modules/arachne-core.md'
+        - 'arachne-http': 'modules/arachne-http.md'
+        - 'arachne-pedestal': 'modules/arachne-pedestal.md'
+        - 'arachne-assets': 'modules/arachne-assets.md'
+        - 'arachne-cljs': 'modules/arachne-cljs.md'
+        - 'arachne-figwheel': 'modules/arachne-figwheel.md'
     - Contributing: contributing.md
     - API Documentation: api/index.md
 
