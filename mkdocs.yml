@@ -1,4 +1,4 @@
-site_name: Arachne Web Framework Documentation
+site_name: Arachne Web Framework
 theme: readthedocs
 site_url: http://docs.arachne-framework.org
 repo_url: https://github.com/arachne-framework
@@ -9,7 +9,7 @@ pages:
     - Architectural Overview: architecture.md
     - Tutorials:
         - 'Creating a Project': tutorials/creating-a-project.md
-        - 'HTTP Requests': tutorials/http-requests.md
+        - 'Handling HTTP Requests': tutorials/http-requests.md
         - 'Dependency Injection': tutorials/dependency-injection.md
         - 'Static Assets': tutorials/serving-assets.md
         - 'Request Interceptors': tutorials/interceptors.md
