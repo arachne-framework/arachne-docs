@@ -28,12 +28,12 @@ All Arachne applications are built by assembling a selection of suitable modules
 
 Arachne's core modules include:
 
-- [arachne.core](modules/arachne.core.md) - boostrap Arachne itself
-- [arachne.http](modules/arachne.http.md) - definitions and tools for dealing with basic web concepts
-- [arachne.pedestal](modules/arachne.pedestal.md) - a Pedestal-based HTTP server
-- [arachne.assets](modules/arachne.assets.md) - generic asset transformation pipeline
-- [arachne.cljs](modules/arachne.cljs.md) - tools to compile ClojureScript (as part of an asset pipeline)
-- [arachne.figwheel](modules/arachne.figwheel.md) - Figwheel server for rapid, iterative ClojureScript development
+- [arachne.core](modules/arachne-core.md) - boostrap Arachne itself
+- [arachne.http](modules/arachne-http.md) - definitions and tools for dealing with basic web concepts
+- [arachne.pedestal](modules/arachne-pedestal.md) - a Pedestal-based HTTP server
+- [arachne.assets](modules/arachne-assets.md) - generic asset transformation pipeline
+- [arachne.cljs](modules/arachne-cljs.md) - tools to compile ClojureScript (as part of an asset pipeline)
+- [arachne.figwheel](modules/arachne-figwheel.md) - Figwheel server for rapid, iterative ClojureScript development
 
 Visit these module's documentation pages for a detailed explanation of the concepts that they define, and how to use them in the context of a project.
 
