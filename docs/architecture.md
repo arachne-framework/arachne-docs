@@ -47,7 +47,7 @@ Note that an Arachne runtime is based off a single configuration _value_. The co
 
 # Modules
 
-Arachne is not a monolithic library. Any Arachne application is built from many different _modules_, each implementing some feature set or providing some particular functionality. Some modules, such as the base [arachne.core](modules/arachne.core.md) or [arachne.http](modules/arachne.http.md) are "official" modules and integral to the Arachne system; however, the hope is that Arachne will also develop a thriving ecosystem of third-party and open-source modules.
+Arachne is not a monolithic library. Any Arachne application is built from many different _modules_, each implementing some feature set or providing some particular functionality. Some modules, such as the base [arachne-core](modules/arachne-core.md) or [arachne-http](modules/arachne-http.md) are "official" modules and integral to the Arachne system; however, the hope is that Arachne will also develop a thriving ecosystem of third-party and open-source modules.
 
 At a concrete level, an Arachne module is a Maven artifact containing Clojure code (or AOT compiled class files), packaged and delivered like any other. Modules can contain library code that users may call, just like any other Clojure library.
 
@@ -78,7 +78,7 @@ Based on the above description of [modules](#modules) and the [runtime](#runtime
     1. A graph of active modules is determined, starting with the application and its dependencies.
     2. A schema is assembled by asking each active module if it has any schema to contribute (via its `schema` hook). A fresh configuration is built, with a schema that is the union of the active module schemas.
     3. In dependency order, each module has the opportunity to update the fresh configuration using its `initializers` hook. The application itself will have its initializers (including any user-supplied DSL scripts) called last.
-    4. In reverse dependency order, each module has the opportunity to query and update the configuration using its `configure` hook. The application will go first, and the module with the fewest dependencies (which will always be [arachne.core](modules/arachne.core.md)), last.
+    4. In reverse dependency order, each module has the opportunity to query and update the configuration using its `configure` hook. The application will go first, and the module with the fewest dependencies (which will always be [arachne-core](modules/arachne-core.md)), last.
 
 1. **Initializing the runtime**
 
