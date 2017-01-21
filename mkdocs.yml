@@ -13,7 +13,7 @@ pages:
         - 'Dependency Injection': tutorials/dependency-injection.md
         - 'Static Assets': tutorials/serving-assets.md
         - 'Request Interceptors': tutorials/interceptors.md
-        - 'ClojureSript': tutorials/cljs.md
+        - 'ClojureScript': tutorials/cljs.md
         - 'Figwheel': tutorials/figwheel.md
     - Modules:
         - 'arachne-core': 'modules/arachne-core.md'
