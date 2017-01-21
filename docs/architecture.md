@@ -2,7 +2,7 @@
 
 Arachne is fundamentally data driven, and Arachne's architecture may be viewed as an experiment in taking a "data-driven" approach to its logical extreme.
 
-Every Arachne application is defined, first and foremost, by its *configuration*. The configuration defines every aspect of the application. This includes not only thinks that are traditionally "config" values like URLs, ports and connection info, but also much more fundamental aspects of the application including:
+Every Arachne application is defined, first and foremost, by its *configuration*. The configuration defines every aspect of the application. This includes not only things that are traditionally "config" values like URLs, ports and connection info, but also much more fundamental aspects of the application including:
 
 - Dependency injection
 - HTTP Routes and endpoints
