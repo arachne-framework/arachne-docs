@@ -251,7 +251,7 @@ There are a few gotchas to remember when doing REPL-driven development with Arac
 1. If you change anything in your config script, you'll need to stop your runtime and rebuild your config from `(arachne.core/config)`. The config that it returns is immutable, and can't be updated once it's been used to start a runtime.
 2. If you change the code you use to define your component definitions, you'll have to re-initialize your runtime to see the changes, starting from `(arachne.core/runtime)`. Changing the definition of a component won't change the instances that are referenced inside the runtime object.
 
-In the future, we plan to release dev tools that will watch source files and config scripts for changes and do some of these things manually, but for now it's the responsibility of users to keep track of them.
+In the future, we plan to release dev tools that will watch source files and config scripts for changes and do some of these things automatically, but for now it's the responsibility of users to keep track of them.
 
 #### Running from the command line
 
