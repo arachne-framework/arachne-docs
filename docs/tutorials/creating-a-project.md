@@ -140,7 +140,7 @@ The second argument is a quoted symbol, identifying the constructor function to 
 
 The `arachne.core.dsl/component` function also takes an optional third argument, to specify the dependencies of the component, but we'll ignore that for now.
 
-The `arachne.core.dsl/runtime` function defines a named _runtime entity_ in the application's configuration. The runtime entity groups components together and specifies which ones should be instanted when an Arachne program starts. When we actually run our program, we'll see that we have to tell Arachne which runtime we want to use, which in turn indicates the set of components that we want started.
+The `arachne.core.dsl/runtime` function defines a named _runtime entity_ in the application's configuration. The runtime entity groups components together and specifies which ones should be instantiated when an Arachne program starts. When we actually run our program, we'll see that we have to tell Arachne which runtime we want to use, which in turn indicates the set of components that we want started.
 
 In this case we just have one runtime (named `:myproj/runtime`), which identifies our one and only component (`:myproj/widget-1`). But as applications get larger and more complex, it can be very useful to have multiple runtimes in the same config. For example, two different but related services could be defined in the same Arachne config, but have completely different runtimes, and do completely different things when started.
 
