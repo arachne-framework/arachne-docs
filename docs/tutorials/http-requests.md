@@ -152,7 +152,7 @@ Hit the `http://localhost:8080/` URL to see your endpoint in action!
 
 ### Path params
 
-You aren't limited to specific, hardcoded routes. Arachne (via Pedestal) also allows you to use a semicolon in a route name to create a _path parameter_. Values at that path are then available in the request, in a map under the `:path-params` key.
+You aren't limited to specific, hardcoded routes. Arachne (via Pedestal) also allows you to use a colon in a route name to create a _path parameter_. Values at that path are then available in the request, in a map under the `:path-params` key.
 
 Let's try it out with a new handler function:
 
