@@ -127,7 +127,7 @@ At this point, we can start a runtime. But before we do, we should configure Log
 ````xml
 <configuration debug="false">
 
-    -<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} %-5level - %logger{36} %msg%n</pattern>
         </encoder>
