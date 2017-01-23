@@ -162,9 +162,7 @@ Let's try it out with a new handler function:
   [req]
   (let [name (get-in req [:path-params :name])]
     {:status 200
-     :body (if (empty? name)
-             "Who's there!?"
-             (str "Hello, " name "!"))}))
+     :body (str "Hello, " name "!")}))
 ````
 
 And the corresponding line in the configuration script, inside our server:
@@ -174,6 +172,8 @@ And the corresponding line in the configuration script, inside our server:
 ````
 
 The `:name` key in the path indicates that any value at that URL should be bound to the `:name` key in the request's `:path-params`.
+
+After rebuilding the config and restarting the Arachne runtime, you should be able to see the new handler in action at `http://localhost:8080/greet/Luke`.
 
 You may also notice that we've defined the endpoint in a different way than we did before. Instead of giving the handler component an Arachne ID and then referencing it by ID, we defined it anonymously and inline, declaring it *inside* the `h/endpoint` form.
 

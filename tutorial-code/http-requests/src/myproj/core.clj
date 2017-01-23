@@ -25,10 +25,7 @@
   [req]
   (let [name (get-in req [:path-params :name])]
     {:status 200
-     :body (if (empty? name)
-             "Who's there!?"
-             (str "Hello, " name "!"))}))
-
+     :body (str "Hello, " name "!")}))
 
 (comment
   (require '[arachne.core :as arachne])
