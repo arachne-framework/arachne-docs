@@ -50,7 +50,7 @@ Edit the `project.clj` file to contain the following contents:
 You can just cut and paste for now, but if you're curious about what any of this means:
 
 - Arachne leverages the new `clojure.spec` library heavily, and therefore requires the latest alpha of Clojure 1.9
-- The version number for Arachne looks funky. WTF is `0.1.0-master-0081-0ab2073` supposed to mean? Well, instead of using SNAPSHOT builds that are effectively mutable and can change underneath you, Arachne's dev builds are named with the following format: `<semver>-<branch>-<commit-idx>-<commit-sha>`. This guarantees that there is a unique version number for each dev build, and you can compare any two versions by looking at the commit-idx: we know that `0081` is newere than `0080` and older than `0082`. Eventually, we'll move to regular release versions, but for now working with dev builds is the best way to stay up-to-date.
+- The version number for Arachne looks funky. WTF is `0.1.0-master-0081-0ab2073` supposed to mean? Well, instead of using SNAPSHOT builds that are effectively mutable and can change underneath you, Arachne's dev builds are named with the following format: `<semver>-<branch>-<commit-idx>-<commit-sha>`. This guarantees that there is a unique version number for each dev build, and you can compare any two versions by looking at the commit-idx: we know that `0081` is newer than `0080` and older than `0082`. Eventually, we'll move to regular release versions, but for now working with dev builds is the best way to stay up-to-date.
 - We've included DataScript on the classpath, but we also could have used [Datomic](http://www.datomic.com/get-datomic.html) or [Datomic Free](https://my.datomic.com/downloads/free). Arachne will detect which one is on your classpath and use whatever is present (there is also a way to specify explicitly which to use, if your project includes both Datomic and Datascript.)
 - Logging is provided by SLF4J, which is compatible with the logging used by most Clojure products (such as Datomic itself.) We can use any concrete logger that supports SLF4J. Logback is merely a common choice.
 - We need to add the `arachne-dev` repository explicitly, since Arachne is not yet deployed into Clojars or any other public maven repository.
@@ -204,7 +204,7 @@ Inside this seemingly simple function call, a _huge_ number of things are happen
 1. We pass in only the name of our application, `:myproj/app`
 2. The application metadata is loaded from the `arachne.edn` file.
 3. A new config is built, using schema derived from all the modules that we depend on.
-3. Our config script is evaluated (you can put some `printlns` in it, if you like, to prove to yourself that this is the case)
+3. Our config script is evaluated (you can put some `println`s in it, if you like, to prove to yourself that this is the case)
 4. All the modules that we required are doing their thing, adding their own data to the config, and possibly querying and manipulating the data that we added.
 
 The value that is returned is a configuration object: an immutable, in-memory database.
