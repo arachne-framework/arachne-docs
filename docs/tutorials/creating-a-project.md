@@ -204,7 +204,7 @@ Inside this seemingly simple function call, a _huge_ number of things are happen
 1. We pass in only the name of our application, `:myproj/app`
 2. The application metadata is loaded from the `arachne.edn` file.
 3. A new config is built, using schema derived from all the modules that we depend on.
-3. Our config script is evaluated (you can put some `printlns` in it, if you like, to prove to yourself that this is the case)
+3. Our config script is evaluated (you can put some `println`s in it, if you like, to prove to yourself that this is the case)
 4. All the modules that we required are doing their thing, adding their own data to the config, and possibly querying and manipulating the data that we added.
 
 The value that is returned is a configuration object: an immutable, in-memory database.
