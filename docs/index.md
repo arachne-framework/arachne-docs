@@ -1,6 +1,16 @@
-![arachne logo](img/logo-horizontal.svg)
+[![arachne logo](img/logo-horizontal.svg)](http://arachne-framework.org)
 
 Welcome to Arachne's documentation site! Here you will find everything you need to start using Arachne, as well as reference and API documentation.
+
+<h2>What is Arachne?</h2>
+
+Arachne is a web framework for Clojure. It aims to be more than a collection of libraries, and provide a coherent, extensible skeleton for rapid development of robust, industrial-scale web applications.
+
+It intends to exhibit the following qualities:
+
+- Modularity. Each aspect of Arachne's functionality is delivered as a separate
+- Cohesion. Despite being highly modular, each module exposes clear integration points, allowing modules to build on eachother to deliver highly sophisticated composite behavior.
+- Data-driven. Each Arachne application is, at heart, a database specifying what programmatic entities exist and how they are linked.
 
 <h2>Getting Started</h2>
 
@@ -11,8 +21,8 @@ These will walk you through the process of creating a new Arachne application, i
 1. [creating a new project](tutorials/creating-a-project.md)
 - [handling HTTP requests](tutorials/http-requests.md)
 - [using dependency injection](tutorials/dependency-injection.md)
-- [serving static assets](tutorials/serving-assets.md)
 - [using request interceptors](tutorials/interceptors.md)
+- [serving static assets](tutorials/serving-assets.md)
 - [compiling ClojureScript](tutorials/cljs.md)
 - [dynamic ClojureScript development with Figwheel](tutorials/figwheel.md)
 

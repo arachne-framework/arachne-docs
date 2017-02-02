@@ -11,8 +11,8 @@ pages:
         - 'Creating a Project': tutorials/creating-a-project.md
         - 'Handling HTTP Requests': tutorials/http-requests.md
         - 'Dependency Injection': tutorials/dependency-injection.md
-        - 'Static Assets': tutorials/serving-assets.md
         - 'Request Interceptors': tutorials/interceptors.md
+        - 'Static Assets': tutorials/serving-assets.md
         - 'ClojureScript': tutorials/cljs.md
         - 'Figwheel': tutorials/figwheel.md
     - Modules:
