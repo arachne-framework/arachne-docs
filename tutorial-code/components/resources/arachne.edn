@@ -1,0 +1,3 @@
+[{:arachne/name :myproj/app
+  :arachne/inits ["config/myproj.clj"]
+  :arachne/dependencies [:org.arachne-framework/arachne-pedestal]}]
