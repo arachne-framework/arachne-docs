@@ -1,6 +1,6 @@
 <h1>Arachne Core</h1>
 
-The Core module defines the basic high-level concepts and code used to bootstrap an Arachne application.
+The `:org.arachne-framework/arachne-core` module defines the basic high-level concepts and code used to bootstrap an Arachne application.
 
 ## Concepts
 
