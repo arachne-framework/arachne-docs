@@ -1,5 +1,8 @@
 site_name: Arachne Web Framework
 theme: readthedocs
+extra_css:
+    - api-override.css
+    - extra.css
 site_url: http://docs.arachne-framework.org
 repo_url: https://github.com/arachne-framework
 site_description: 'Documentation for the Arachne Web Framework'
