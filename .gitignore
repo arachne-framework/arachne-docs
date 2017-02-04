@@ -4,3 +4,4 @@
 api-doc-generator/target/*
 .DS_Store
 .gh-pages
+*.iml
