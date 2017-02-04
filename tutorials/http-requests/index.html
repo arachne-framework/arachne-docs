@@ -112,13 +112,6 @@
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../serving-assets/">Static Assets</a>
-        
-    </li>
-
-        
-            
-    <li class="toctree-l1 ">
         <a class="" href="../interceptors/">Request Interceptors</a>
         
     </li>
@@ -126,7 +119,14 @@
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../cljs/">ClojureSript</a>
+        <a class="" href="../serving-assets/">Static Assets</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cljs/">ClojureScript</a>
         
     </li>
 
@@ -339,7 +339,7 @@ See the pattern? Most Arachne DSL functions that define a component entity take 
 <p>At this point, we can start a runtime. But before we do, we should configure Logback to log a little bit less verbosely. If no <code>logback.xml</code> file is supplied, the default log level is <code>DEBUG</code>, and Pedestal dumps a <em>lot</em> of debug messages. Copy and paste the following <code>logback.xml</code> file into your <code>resources</code> directory to set a default log level of <code>INFO</code> and cut down on the noise:</p>
 <pre><code class="xml">&lt;configuration debug=&quot;false&quot;&gt;
 
-    -&lt;appender name=&quot;STDOUT&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;
+    &lt;appender name=&quot;STDOUT&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;
         &lt;encoder&gt;
             &lt;pattern&gt;%d{HH:mm:ss.SSS} %-5level - %logger{36} %msg%n&lt;/pattern&gt;
         &lt;/encoder&gt;
@@ -359,15 +359,13 @@ See the pattern? Most Arachne DSL functions that define a component entity take 
 <p>You should see log output indicating that the server has started.</p>
 <p>Hit the <code>http://localhost:8080/</code> URL to see your endpoint in action!</p>
 <h3 id="path-params">Path params</h3>
-<p>You aren't limited to specific, hardcoded routes. Arachne (via Pedestal) also allows you to use a semicolon in a route name to create a <em>path parameter</em>. Values at that path are then available in the request, in a map under the <code>:path-params</code> key.</p>
+<p>You aren't limited to specific, hardcoded routes. Arachne (via Pedestal) also allows you to use a colon (similar to a Clojure keyword) to name a route segment, creating a <em>path parameter</em>. Values at that path are then available in the request, in a map under the <code>:path-params</code> key.</p>
 <p>Let's try it out with a new handler function:</p>
 <pre><code class="clojure">(defn greeter
   [req]
   (let [name (get-in req [:path-params :name])]
     {:status 200
-     :body (if (empty? name)
-             &quot;Who's there!?&quot;
-             (str &quot;Hello, &quot; name &quot;!&quot;))}))
+     :body (str &quot;Hello, &quot; name &quot;!&quot;)}))
 </code></pre>
 
 <p>And the corresponding line in the configuration script, inside our server:</p>
@@ -375,6 +373,7 @@ See the pattern? Most Arachne DSL functions that define a component entity take 
 </code></pre>
 
 <p>The <code>:name</code> key in the path indicates that any value at that URL should be bound to the <code>:name</code> key in the request's <code>:path-params</code>.</p>
+<p>After rebuilding the config and restarting the Arachne runtime, you should be able to see the new handler in action at <code>http://localhost:8080/greet/Luke</code>.</p>
 <p>You may also notice that we've defined the endpoint in a different way than we did before. Instead of giving the handler component an Arachne ID and then referencing it by ID, we defined it anonymously and inline, declaring it <em>inside</em> the <code>h/endpoint</code> form.</p>
 <p>That works fine! Arachne DSL functions which define components (including <code>arachne.core.dsl/component</code>, <code>arachne.http.dsl/handler</code> and <code>arachne.pedestal.dsl/server</code>, that we've seen so far) all return the entity ID of their newly created config entity, in the context configuration. And DSL forms which reference another component (such as <code>arachne.http.dsl/endpoint</code>) can accept either an Arachne ID, <em>or</em> an entity ID as a component identifier.</p>
 <p>This means that the following three forms are equivalent:</p>

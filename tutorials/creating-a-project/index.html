@@ -116,13 +116,6 @@
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../serving-assets/">Static Assets</a>
-        
-    </li>
-
-        
-            
-    <li class="toctree-l1 ">
         <a class="" href="../interceptors/">Request Interceptors</a>
         
     </li>
@@ -130,7 +123,14 @@
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../cljs/">ClojureSript</a>
+        <a class="" href="../serving-assets/">Static Assets</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cljs/">ClojureScript</a>
         
     </li>
 
@@ -291,7 +291,7 @@ Of course, you can also use Arachne with <a href="http://boot-clj.com/">boot</a>
 <p>You can just cut and paste for now, but if you're curious about what any of this means:</p>
 <ul>
 <li>Arachne leverages the new <code>clojure.spec</code> library heavily, and therefore requires the latest alpha of Clojure 1.9</li>
-<li>The version number for Arachne looks funky. WTF is <code>0.1.0-master-0081-0ab2073</code> supposed to mean? Well, instead of using SNAPSHOT builds that are effectively mutable and can change underneath you, Arachne's dev builds are named with the following format: <code>&lt;semver&gt;-&lt;branch&gt;-&lt;commit-idx&gt;-&lt;commit-sha&gt;</code>. This guarantees that there is a unique version number for each dev build, and you can compare any two versions by looking at the commit-idx: we know that <code>0081</code> is newere than <code>0080</code> and older than <code>0082</code>. Eventually, we'll move to regular release versions, but for now working with dev builds is the best way to stay up-to-date.</li>
+<li>The version number for Arachne looks funky. WTF is <code>0.1.0-master-0081-0ab2073</code> supposed to mean? Well, instead of using SNAPSHOT builds that are effectively mutable and can change underneath you, Arachne's dev builds are named with the following format: <code>&lt;semver&gt;-&lt;branch&gt;-&lt;commit-idx&gt;-&lt;commit-sha&gt;</code>. This guarantees that there is a unique version number for each dev build, and you can compare any two versions by looking at the commit-idx: we know that <code>0081</code> is newer than <code>0080</code> and older than <code>0082</code>. Eventually, we'll move to regular release versions, but for now working with dev builds is the best way to stay up-to-date.</li>
 <li>We've included DataScript on the classpath, but we also could have used <a href="http://www.datomic.com/get-datomic.html">Datomic</a> or <a href="https://my.datomic.com/downloads/free">Datomic Free</a>. Arachne will detect which one is on your classpath and use whatever is present (there is also a way to specify explicitly which to use, if your project includes both Datomic and Datascript.)</li>
 <li>Logging is provided by SLF4J, which is compatible with the logging used by most Clojure products (such as Datomic itself.) We can use any concrete logger that supports SLF4J. Logback is merely a common choice.</li>
 <li>We need to add the <code>arachne-dev</code> repository explicitly, since Arachne is not yet deployed into Clojars or any other public maven repository.</li>
@@ -356,7 +356,7 @@ Of course, you can also use Arachne with <a href="http://boot-clj.com/">boot</a>
 <p>The <code>arachne.core.dsl/component</code> function defines a component, in the configuration. The first argument (here the keyword <code>:myproj/widget-1</code>) is a unique ID for our component. Anywhere in our config where we refer to <code>:myproj/widget-1</code>, we're talking about the same entity in the configuration DB.</p>
 <p>The second argument is a quoted symbol, identifying the constructor function to use when actually creating the component instance. Understand, the config DSL function only <em>identifies</em> the constructor function; it isn't called yet! It's merely stored in the config, to be used when your app finally starts.</p>
 <p>The <code>arachne.core.dsl/component</code> function also takes an optional third argument, to specify the dependencies of the component, but we'll ignore that for now.</p>
-<p>The <code>arachne.core.dsl/runtime</code> function defines a named <em>runtime entity</em> in the application's configuration. The runtime entity groups components together and specifies which ones should be instanted when an Arachne program starts. When we actually run our program, we'll see that we have to tell Arachne which runtime we want to use, which in turn indicates the set of components that we want started.</p>
+<p>The <code>arachne.core.dsl/runtime</code> function defines a named <em>runtime entity</em> in the application's configuration. The runtime entity groups components together and specifies which ones should be instantiated when an Arachne program starts. When we actually run our program, we'll see that we have to tell Arachne which runtime we want to use, which in turn indicates the set of components that we want started.</p>
 <p>In this case we just have one runtime (named <code>:myproj/runtime</code>), which identifies our one and only component (<code>:myproj/widget-1</code>). But as applications get larger and more complex, it can be very useful to have multiple runtimes in the same config. For example, two different but related services could be defined in the same Arachne config, but have completely different runtimes, and do completely different things when started.</p>
 <h3 id="application-metadata">Application metadata</h3>
 <p>Finally, we have to tell Arachne some metadata about our application: what its name is, what modules it depends on, and where our config script is located.</p>
@@ -406,7 +406,7 @@ Of course, you can also use Arachne with <a href="http://boot-clj.com/">boot</a>
 <li>We pass in only the name of our application, <code>:myproj/app</code></li>
 <li>The application metadata is loaded from the <code>arachne.edn</code> file.</li>
 <li>A new config is built, using schema derived from all the modules that we depend on.</li>
-<li>Our config script is evaluated (you can put some <code>printlns</code> in it, if you like, to prove to yourself that this is the case)</li>
+<li>Our config script is evaluated (you can put some <code>println</code>s in it, if you like, to prove to yourself that this is the case)</li>
 <li>All the modules that we required are doing their thing, adding their own data to the config, and possibly querying and manipulating the data that we added.</li>
 </ol>
 <p>The value that is returned is a configuration object: an immutable, in-memory database.</p>
@@ -440,7 +440,7 @@ Of course, you can also use Arachne with <a href="http://boot-clj.com/">boot</a>
 <li>If you change anything in your config script, you'll need to stop your runtime and rebuild your config from <code>(arachne.core/config)</code>. The config that it returns is immutable, and can't be updated once it's been used to start a runtime.</li>
 <li>If you change the code you use to define your component definitions, you'll have to re-initialize your runtime to see the changes, starting from <code>(arachne.core/runtime)</code>. Changing the definition of a component won't change the instances that are referenced inside the runtime object.</li>
 </ol>
-<p>In the future, we plan to release dev tools that will watch source files and config scripts for changes and do some of these things manually, but for now it's the responsibility of users to keep track of them.</p>
+<p>In the future, we plan to release dev tools that will watch source files and config scripts for changes and do some of these things automatically, but for now it's the responsibility of users to keep track of them.</p>
 <h4 id="running-from-the-command-line">Running from the command line</h4>
 <p>Running from the command line is, fortunately, even more straightforward. Arachne defines an <code>arachne.run</code> namespace, which contains a <code>-main</code> method that can be used to easily launch an Arachne application.</p>
 <p>You can set <code>arachne.run</code> as the default <code>:main</code> namespace in leiningen by adding the following key to your <code>project.clj</code>:</p>
