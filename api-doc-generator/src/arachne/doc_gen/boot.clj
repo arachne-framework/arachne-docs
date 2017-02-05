@@ -19,8 +19,8 @@
              :exclusions [org.clojure/clojurescript]]
             [org.clojure/clojure "1.9.0-alpha14"]
 
-            [org.arachne-framework/pedestal-assets "0.1.0-master-0004-9ae2bdc"]
-            [org.arachne-framework/arachne-figwheel "0.1.0-master-0008-6c81581"]
+            [org.arachne-framework/pedestal-assets "0.1.0-master-0005-5aa151f"]
+            [org.arachne-framework/arachne-figwheel "0.1.0-master-0010-14c65c6"]
 
             [com.datomic/datomic-free "0.9.5350"]
             [datascript "0.15.3"

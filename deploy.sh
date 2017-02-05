@@ -3,7 +3,7 @@ set -x
 rm -rf site
 mkdocs build
 cd api-doc-generator
-lein codox
+boot codox target
 cd ..
 rm -rf site/api
 mv api-doc-generator/target/doc site/api
