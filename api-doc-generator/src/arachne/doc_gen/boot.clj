@@ -12,35 +12,41 @@
                    "../../arachne-pedestal/src"
                    "../../arachne-assets/src"
                    "../../arachne-pedestal-assets/src"
+                   "../../arachne-cljs/src"
+                   "../../arachne-figwheel/src"])
 
-                   ])
-
-(def deps '[[codox "0.10.2"]
+(def deps '[[codox "0.10.2"
+             :exclusions [org.clojure/clojurescript]]
             [org.clojure/clojure "1.9.0-alpha14"]
 
             [org.arachne-framework/pedestal-assets "0.1.0-master-0004-9ae2bdc"]
             [org.arachne-framework/arachne-figwheel "0.1.0-master-0008-6c81581"]
 
             [com.datomic/datomic-free "0.9.5350"]
-            [datascript "0.15.3"]
+            [datascript "0.15.3"
+             :exclusions [org.clojure/clojurescript]]
             ])
 
-(def namespaces '[arachne.assets.dsl
-                  arachne.build
-                  arachne.core.config.impl.datascript
+(def namespaces '[arachne.core.config.impl.datascript
                   arachne.core.config.impl.datomic
                   arachne.core.config.model
                   arachne.core.dsl
                   arachne.core.runtime
+                  arachne.log
                   arachne.error
+                  arachne.build
+                  arachne.run
                   arachne.http
                   arachne.http.dsl
                   arachne.http.config
                   arachne.http.dsl.test
-                  arachne.log
                   arachne.pedestal
                   arachne.pedestal.dsl
-                  arachne.run])
+                  arachne.pedestal-assets.dsl
+                  arachne.assets.dsl
+                  arachne.cljs.dsl
+                  arachne.figwheel
+                  arachne.figwheel.dsl])
 
 (defn- init [fresh-pod]
   (pod/require-in fresh-pod '[codox.main]))
