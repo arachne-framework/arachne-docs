@@ -88,7 +88,7 @@ Nested *inside* the server element, we declare a HTTP endpoint, using the `arach
 
 - The HTTP method that this endpoint responds to, as a Clojure keyword. You may also pass a set of keywords if the endpoint can respond to multiple request types.
 - The route to which to "attach" the endpoint: requests to this route will be delegated to the endpoint.
-- The Arachne ID of the endpoint itself. This is a reference to the handler endpoint we declared above.
+- The Arachne ID of the handler for this endpoint (which we declared above).
 
 In general, this is how an Arachne applications always define their routing structure: A `server` DSL form, with nested forms for all the endpoints inside.
 
