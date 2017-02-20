@@ -1,6 +1,6 @@
 # Development Versions
 
-This page lists the most recent development versions of the Arachne artifacts. These versions are guaranteed to have passed their test suite, but are otherwise experimental and may be broken subtle ways.
+This page lists the most recent development versions of the Arachne artifacts. These versions are guaranteed to have passed their test suite, but are otherwise experimental and may be broken in subtle ways.
 
 ````clojure
 [org.arachne-framework/arachne-core "<arachne-core-version>"]
