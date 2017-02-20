@@ -1,5 +1,8 @@
 site_name: Arachne Web Framework
 theme: readthedocs
+extra_javascript:
+    - underscore-min.js
+    - versions.js
 extra_css:
     - api-override.css
     - extra.css
@@ -9,6 +12,7 @@ site_description: 'Documentation for the Arachne Web Framework'
 copyright: '© Luke VanderHart 2017'
 pages:
     - Home: index.md
+    - Versions: versions.md
     - Architectural Overview: architecture.md
     - Tutorials:
         - 'Creating a Project': tutorials/creating-a-project.md
