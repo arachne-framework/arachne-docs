@@ -7,7 +7,7 @@ extra_css:
     - api-override.css
     - extra.css
 site_url: http://docs.arachne-framework.org
-repo_url: https://github.com/arachne-framework
+repo_url: https://github.com/arachne-framework/arachne-docs
 site_description: 'Documentation for the Arachne Web Framework'
 copyright: '© Luke VanderHart 2017'
 pages:
