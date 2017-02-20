@@ -31,7 +31,10 @@ function version_of(selector, name) {
 
     $.ajax(url, {success: onSuccess, error: onError});
 
-     $(selector).text("loading...");
+   $(selector).text(function(i,txt){
+       var original = "<" + name + "-version>";
+       return txt.replace(original, "loading...")
+    });
 
     function onSuccess(data) {
         var uris = _.map(data.results, function(d) { return d.uri; })
@@ -42,7 +45,9 @@ function version_of(selector, name) {
         }
 
         var version = most_recent_version(versions).version_str;
-        $(selector).text("\"" + version + "\"");
+        $(selector).text(function(i,txt){
+            return txt.replace("loading...", version)
+        });
     }
 
     function onError() {
@@ -58,9 +63,9 @@ function lookup_versions() {
     });
 }
 
-var version_re = /^\"<([\w-]+)-version>\"$/
+var version_re = /^\"?<([\w-]+)-version>\"?$/
 function replace_versions() {
-     $(document).find("span").filter(function () {
+     $(document).find("code span,code").filter(function () {
         var match = version_re.exec(this.textContent);
         if (match) {
           return true;

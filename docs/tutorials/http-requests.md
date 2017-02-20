@@ -22,7 +22,7 @@ After adding it, your leiningen dependencies should look something like this:
 
 ````clojure
 :dependencies [[org.clojure/clojure "1.9.0-alpha14"]
-               [org.arachne-framework/arachne-pedestal "0.1.0-master-0036-59ecd65"]
+               [org.arachne-framework/arachne-pedestal "<arachne-pedestal-version>"]
                [datascript "0.15.5"]
                [ch.qos.logback/logback-classic "1.1.3"]]
 ````
