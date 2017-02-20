@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Contributing - Arachne Web Framework</title>
+  <title>Versions - Arachne Web Framework</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -19,9 +19,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Contributing";
-    var mkdocs_page_input_path = "contributing.md";
-    var mkdocs_page_url = "/contributing/";
+    var mkdocs_page_name = "Versions";
+    var mkdocs_page_input_path = "versions.md";
+    var mkdocs_page_url = "/versions/";
   </script>
   
   <script src="../js/jquery-2.1.1.min.js"></script>
@@ -56,8 +56,15 @@
 <li>
           
             <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../versions/">Versions</a>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Versions</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#development-versions">Development Versions</a></li>
+                
+            
+            </ul>
         
     </li>
 <li>
@@ -177,15 +184,8 @@
 <li>
           
             <li>
-    <li class="toctree-l1 current">
-        <a class="current" href="./">Contributing</a>
-        
-            <ul>
-            
-                <li class="toctree-l3"><a href="#contributors-guide">Contributor's Guide</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l1 ">
+        <a class="" href="../contributing/">Contributing</a>
         
     </li>
 <li>
@@ -219,10 +219,10 @@
     
       
     
-    <li>Contributing</li>
+    <li>Versions</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/arachne-framework/arachne-docs/edit/master/docs/contributing.md"
+        <a href="https://github.com/arachne-framework/arachne-docs/edit/master/docs/versions.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -232,8 +232,21 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="contributors-guide">Contributor's Guide</h1>
-<p>Coming soon!</p>
+                <h1 id="development-versions">Development Versions</h1>
+<p>This page lists the most recent development versions of the Arachne artifacts. These versions are guaranteed to have passed their test suite, but are otherwise experimental and may be broken subtle ways.</p>
+<pre><code class="clojure">[org.arachne-framework/arachne-core &quot;&lt;arachne-core-version&gt;&quot;]
+[org.arachne-framework/arachne-http &quot;&lt;arachne-http-version&gt;&quot;]
+[org.arachne-framework/arachne-pedestal &quot;&lt;arachne-pedestal-version&gt;&quot;]
+[org.arachne-framework/arachne-assets &quot;&lt;arachne-assets-version&gt;&quot;]
+[org.arachne-framework/pedestal-assets &quot;&lt;pedestal-assets-version&gt;&quot;]
+[org.arachne-framework/arachne-cljs &quot;&lt;arachne-cljs-version&gt;&quot;]
+[org.arachne-framework/arachne-figwheel &quot;&lt;arachne-figwheel-version&gt;&quot;]
+</code></pre>
+
+<p>Note that to use these artifacts, you will need to add the Arachne maven repository to your project. With Leiningen, it looks something like this:</p>
+<pre><code class="clojure">  :repositories [[&quot;arachne-dev&quot;
+                  &quot;http://maven.arachne-framework.org/artifactory/arachne-dev&quot;]])
+</code></pre>
               
             </div>
           </div>
@@ -241,10 +254,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../api/" class="btn btn-neutral float-right" title="API Documentation">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../architecture/" class="btn btn-neutral float-right" title="Architectural Overview">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../modules/arachne-figwheel/" class="btn btn-neutral" title="arachne-figwheel"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -274,10 +287,10 @@
           <a href="https://github.com/arachne-framework/arachne-docs" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../modules/arachne-figwheel/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../api/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../architecture/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

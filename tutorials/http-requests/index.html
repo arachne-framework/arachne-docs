@@ -57,6 +57,13 @@
           
             <li>
     <li class="toctree-l1 ">
+        <a class="" href="../../versions/">Versions</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
         <a class="" href="../../architecture/">Architectural Overview</a>
         
     </li>
@@ -234,7 +241,7 @@
     <li>Handling HTTP Requests</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/arachne-framework/edit/master/docs/tutorials/http-requests.md"
+        <a href="https://github.com/arachne-framework/arachne-docs/edit/master/docs/tutorials/http-requests.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -259,7 +266,7 @@
 <p>First, we'll need to add a Leiningen dependency, to make sure <code>arachne-pedestal</code> is on our classpath. Because <code>arachne-pedestal</code> ultimately depends on <code>arachne-core</code> as well, we can actually <em>replace</em> <code>arachne-core</code> in the <code>project.clj</code>: it will still be required.</p>
 <p>After adding it, your leiningen dependencies should look something like this:</p>
 <pre><code class="clojure">:dependencies [[org.clojure/clojure &quot;1.9.0-alpha14&quot;]
-               [org.arachne-framework/arachne-pedestal &quot;0.1.0-master-0036-59ecd65&quot;]
+               [org.arachne-framework/arachne-pedestal &quot;&lt;arachne-pedestal-version&gt;&quot;]
                [datascript &quot;0.15.5&quot;]
                [ch.qos.logback/logback-classic &quot;1.1.3&quot;]]
 </code></pre>
@@ -309,7 +316,7 @@ See the pattern? Most Arachne DSL functions that define a component entity take 
 <ul>
 <li>The HTTP method that this endpoint responds to, as a Clojure keyword. You may also pass a set of keywords if the endpoint can respond to multiple request types.</li>
 <li>The route to which to "attach" the endpoint: requests to this route will be delegated to the endpoint.</li>
-<li>The Arachne ID of the endpoint itself. This is a reference to the handler endpoint we declared above.</li>
+<li>The Arachne ID of the handler for this endpoint (which we declared above).</li>
 </ul>
 <p>In general, this is how an Arachne applications always define their routing structure: A <code>server</code> DSL form, with nested forms for all the endpoints inside.</p>
 <p>Again, it cannot be emphasized enough: these DSL forms do not create an actual Pedestal server. They create entities in the config that define the server. No server is actually started, and no ports will be opened until we use this config to initialize a runtime and call <code>start</code>.</p>
@@ -439,7 +446,7 @@ See the pattern? Most Arachne DSL functions that define a component entity take 
   <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
-          <a href="https://github.com/arachne-framework" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+          <a href="https://github.com/arachne-framework/arachne-docs" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
         <span><a href="../creating-a-project/" style="color: #fcfcfc;">&laquo; Previous</a></span>
@@ -450,6 +457,8 @@ See the pattern? Most Arachne DSL functions that define a component entity take 
     </span>
 </div>
     <script src="../../js/theme.js"></script>
+      <script src="../../underscore-min.js"></script>
+      <script src="../../versions.js"></script>
 
 </body>
 </html>

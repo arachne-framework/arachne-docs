@@ -57,6 +57,13 @@
           
             <li>
     <li class="toctree-l1 ">
+        <a class="" href="../../versions/">Versions</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
         <a class="" href="../../architecture/">Architectural Overview</a>
         
     </li>
@@ -238,7 +245,7 @@
     <li>Creating a Project</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/arachne-framework/edit/master/docs/tutorials/creating-a-project.md"
+        <a href="https://github.com/arachne-framework/arachne-docs/edit/master/docs/tutorials/creating-a-project.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -281,7 +288,7 @@ Of course, you can also use Arachne with <a href="http://boot-clj.com/">boot</a>
 <p>Edit the <code>project.clj</code> file to contain the following contents:</p>
 <pre><code class="clojure">(defproject myproj &quot;0.1.0-SNAPSHOT&quot;
   :dependencies [[org.clojure/clojure &quot;1.9.0-alpha14&quot;]
-                 [org.arachne-framework/arachne-core &quot;0.1.0-master-0081-0ab2073&quot;]
+                 [org.arachne-framework/arachne-core &quot;&lt;arachne-core-version&gt;&quot;]
                  [datascript &quot;0.15.5&quot;]
                  [ch.qos.logback/logback-classic &quot;1.1.3&quot;]]
   :repositories [[&quot;arachne-dev&quot;
@@ -291,7 +298,7 @@ Of course, you can also use Arachne with <a href="http://boot-clj.com/">boot</a>
 <p>You can just cut and paste for now, but if you're curious about what any of this means:</p>
 <ul>
 <li>Arachne leverages the new <code>clojure.spec</code> library heavily, and therefore requires the latest alpha of Clojure 1.9</li>
-<li>The version number for Arachne looks funky. WTF is <code>0.1.0-master-0081-0ab2073</code> supposed to mean? Well, instead of using SNAPSHOT builds that are effectively mutable and can change underneath you, Arachne's dev builds are named with the following format: <code>&lt;semver&gt;-&lt;branch&gt;-&lt;commit-idx&gt;-&lt;commit-sha&gt;</code>. This guarantees that there is a unique version number for each dev build, and you can compare any two versions by looking at the commit-idx: we know that <code>0081</code> is newer than <code>0080</code> and older than <code>0082</code>. Eventually, we'll move to regular release versions, but for now working with dev builds is the best way to stay up-to-date.</li>
+<li>The version number for Arachne looks funky. WTF is <code>&lt;arachne-core-version&gt;</code> supposed to mean? Well, instead of using SNAPSHOT builds that are effectively mutable and can change underneath you, Arachne's dev builds are named with the following format: <code>&lt;semver&gt;-&lt;branch&gt;-&lt;commit-idx&gt;-&lt;commit-sha&gt;</code>. This guarantees that there is a unique version number for each dev build, and you can compare any two versions by looking at the commit-idx: we know that <code>0081</code> is newer than <code>0080</code> and older than <code>0082</code>. Eventually, we'll move to regular release versions, but for now working with dev builds is the best way to stay up-to-date. See the <a href="../../versions/">Versions</a> page for a list of all the most recent development versions.</li>
 <li>We've included DataScript on the classpath, but we also could have used <a href="http://www.datomic.com/get-datomic.html">Datomic</a> or <a href="https://my.datomic.com/downloads/free">Datomic Free</a>. Arachne will detect which one is on your classpath and use whatever is present (there is also a way to specify explicitly which to use, if your project includes both Datomic and Datascript.)</li>
 <li>Logging is provided by SLF4J, which is compatible with the logging used by most Clojure products (such as Datomic itself.) We can use any concrete logger that supports SLF4J. Logback is merely a common choice.</li>
 <li>We need to add the <code>arachne-dev</code> repository explicitly, since Arachne is not yet deployed into Clojars or any other public maven repository.</li>
@@ -542,7 +549,7 @@ Caused by: arachne.ArachneException: Arguments to `arachne.core.dsl/component` d
   <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
-          <a href="https://github.com/arachne-framework" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+          <a href="https://github.com/arachne-framework/arachne-docs" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
         <span><a href="../../architecture/" style="color: #fcfcfc;">&laquo; Previous</a></span>
@@ -553,6 +560,8 @@ Caused by: arachne.ArachneException: Arguments to `arachne.core.dsl/component` d
     </span>
 </div>
     <script src="../../js/theme.js"></script>
+      <script src="../../underscore-min.js"></script>
+      <script src="../../versions.js"></script>
 
 </body>
 </html>
