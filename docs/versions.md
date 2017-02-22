@@ -10,6 +10,7 @@ This page lists the most recent development versions of the Arachne artifacts. T
 [org.arachne-framework/pedestal-assets "<pedestal-assets-version>"]
 [org.arachne-framework/arachne-cljs "<arachne-cljs-version>"]
 [org.arachne-framework/arachne-figwheel "<arachne-figwheel-version>"]
+[org.arachne-framework/arachne-sass "<arachne-sass-version>"]
 ````
 
 Note that to use these artifacts, you will need to add the Arachne maven repository to your project. With Leiningen, it looks something like this:
