@@ -13,14 +13,16 @@
                    "../../arachne-assets/src"
                    "../../arachne-pedestal-assets/src"
                    "../../arachne-cljs/src"
-                   "../../arachne-figwheel/src"])
+                   "../../arachne-figwheel/src"
+                   "../../arachne-sass/src"])
 
 (def deps '[[codox "0.10.2"
              :exclusions [org.clojure/clojurescript]]
             [org.clojure/clojure "1.9.0-alpha14"]
 
-            [org.arachne-framework/pedestal-assets "0.1.0-master-0005-5aa151f"]
-            [org.arachne-framework/arachne-figwheel "0.1.0-master-0010-14c65c6"]
+            [org.arachne-framework/pedestal-assets "0.1.0-master-0009-a04e565"]
+            [org.arachne-framework/arachne-sass "0.1.0-master-0020-3930fcd"]
+            [org.arachne-framework/arachne-figwheel "0.1.0-master-0017-27d0544"]
 
             [com.datomic/datomic-free "0.9.5350"]
             [datascript "0.15.3"
@@ -46,7 +48,8 @@
                   arachne.assets.dsl
                   arachne.cljs.dsl
                   arachne.figwheel
-                  arachne.figwheel.dsl])
+                  arachne.figwheel.dsl
+                  arachne.sass.dsl])
 
 (defn- init [fresh-pod]
   (pod/require-in fresh-pod '[codox.main]))
