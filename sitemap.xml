@@ -4,7 +4,7 @@
     
     <url>
      <loc>http://docs.arachne-framework.org/</loc>
-     <lastmod>2017-02-20</lastmod>
+     <lastmod>2017-02-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -12,7 +12,7 @@
     
     <url>
      <loc>http://docs.arachne-framework.org/versions/</loc>
-     <lastmod>2017-02-20</lastmod>
+     <lastmod>2017-02-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -20,7 +20,7 @@
     
     <url>
      <loc>http://docs.arachne-framework.org/architecture/</loc>
-     <lastmod>2017-02-20</lastmod>
+     <lastmod>2017-02-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -29,43 +29,43 @@
         
     <url>
      <loc>http://docs.arachne-framework.org/tutorials/creating-a-project/</loc>
-     <lastmod>2017-02-20</lastmod>
+     <lastmod>2017-02-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://docs.arachne-framework.org/tutorials/http-requests/</loc>
-     <lastmod>2017-02-20</lastmod>
+     <lastmod>2017-02-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://docs.arachne-framework.org/tutorials/dependency-injection/</loc>
-     <lastmod>2017-02-20</lastmod>
+     <lastmod>2017-02-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://docs.arachne-framework.org/tutorials/interceptors/</loc>
-     <lastmod>2017-02-20</lastmod>
+     <lastmod>2017-02-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://docs.arachne-framework.org/tutorials/serving-assets/</loc>
-     <lastmod>2017-02-20</lastmod>
+     <lastmod>2017-02-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://docs.arachne-framework.org/tutorials/cljs/</loc>
-     <lastmod>2017-02-20</lastmod>
+     <lastmod>2017-02-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://docs.arachne-framework.org/tutorials/figwheel/</loc>
-     <lastmod>2017-02-20</lastmod>
+     <lastmod>2017-02-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -75,37 +75,37 @@
         
     <url>
      <loc>http://docs.arachne-framework.org/modules/arachne-core/</loc>
-     <lastmod>2017-02-20</lastmod>
+     <lastmod>2017-02-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://docs.arachne-framework.org/modules/arachne-http/</loc>
-     <lastmod>2017-02-20</lastmod>
+     <lastmod>2017-02-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://docs.arachne-framework.org/modules/arachne-pedestal/</loc>
-     <lastmod>2017-02-20</lastmod>
+     <lastmod>2017-02-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://docs.arachne-framework.org/modules/arachne-assets/</loc>
-     <lastmod>2017-02-20</lastmod>
+     <lastmod>2017-02-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://docs.arachne-framework.org/modules/arachne-cljs/</loc>
-     <lastmod>2017-02-20</lastmod>
+     <lastmod>2017-02-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://docs.arachne-framework.org/modules/arachne-figwheel/</loc>
-     <lastmod>2017-02-20</lastmod>
+     <lastmod>2017-02-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -114,7 +114,7 @@
     
     <url>
      <loc>http://docs.arachne-framework.org/contributing/</loc>
-     <lastmod>2017-02-20</lastmod>
+     <lastmod>2017-02-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -122,7 +122,7 @@
     
     <url>
      <loc>http://docs.arachne-framework.org/api/</loc>
-     <lastmod>2017-02-20</lastmod>
+     <lastmod>2017-02-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
