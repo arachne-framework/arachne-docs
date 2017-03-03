@@ -12,11 +12,41 @@ It intends to exhibit the following qualities:
 - Cohesion. Despite being highly modular, each module exposes clear integration points, allowing modules to build on eachother to deliver highly sophisticated composite behavior.
 - Data-driven. Each Arachne application is, at heart, a database specifying what programmatic entities exist and how they are linked.
 
-<h2>Getting Started</h2>
+<h2>Quick Start</h2>
 
-If you're just getting started, you'll probably want to try out the tutorials.
+Arachne provides a basic command-line project generator tool that you can use to create projects. To install this tool, simply download the shell script, place it somewhere on your system path (`~/bin` is usually good), and `chmod` it to be executable.
 
-These will walk you through the process of creating a new Arachne application, introducing the essential concepts and code along the way.
+```bash
+URL="https://raw.githubusercontent.com/arachne-framework/arachne-proj-gen/release/arachne.sh"
+curl $URL > ~/bin/arachne
+chmod +x ~/bin/arachne
+```
+
+Then, you can call it anywhere to create a new project, using the syntax `arachne new <project-name> <template>`, where the project name is a _fully qualified_ Clojure symbol, and the template is the Git URI of a template repository.
+
+The namespace portion of the project name tells Arachne what kind of namespace structure to use for your project.
+
+A good template to get started with is the `enterprise-spa`, which sets up a robust single-page Arachne that uses Leiningen, Datomic, ClojureScript, Figwheel and Rum.
+
+For example:
+
+```bash
+arachne new my.org/myapp git@github.com:arachne-framework/enterprise-spa.git
+```
+
+That's it! You've generated a project into a directory named `myapp`. You can open up your favorite editor and start hacking, or run it right away:
+
+```bash
+cd myapp
+lein run :my.org/myapp :my.org.myapp/runtime
+```
+
+You'll see it compile some ClojureScript, and then you can try it out by hitting `http://localhost:8080` in your browser.
+
+<h2>Tutorials</h2>
+
+The above technique lets you get started quickily, but if you want to actually understand what's going on you'll probably want to try out the tutorials. These build a similar project, but break it down step by step and explain every concept as it appears.
+
 
 1. [creating a new project](tutorials/creating-a-project.md)
 - [handling HTTP requests](tutorials/http-requests.md)

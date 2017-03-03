@@ -2,7 +2,7 @@
 
 This in-depth tutorial describes how to create a simple Arachne project from scratch, explaining everything as it goes. You can find the complete source code used in this tutorial on [Github](https://github.com/arachne-framework/arachne-docs/tree/master/tutorial-code/creating-a-project).
 
-In practice, you will probably want to start new Arachne projects using Arachne's [project generator](../quick-start.md) However, when learning Arachne, it is instructive to go through this excercise and create each part piece by piece, to gain an understanding of what the parts are and how they work together.
+In practice, you will probably want to start new Arachne projects using Arachne's project generator, as described on the main [docs page](../index.md). However, when learning Arachne, it is instructive to go through this excercise and create each part piece by piece, to gain an understanding of what the parts are and how they work together.
 
 To make the most of this particular tutorial, you will be most effective if you already:
 
