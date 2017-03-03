@@ -2,9 +2,7 @@
 
 This in-depth tutorial describes how to create a simple Arachne project from scratch, explaining everything as it goes. You can find the complete source code used in this tutorial on [Github](https://github.com/arachne-framework/arachne-docs/tree/master/tutorial-code/creating-a-project).
 
-<aside>
-In practice, you will probably want to start new Arachne projects by cloning an existing template app. However, when learning Arachne, it is instructive to go through this excercise and create each part piece by piece, to gain an understanding of what the parts are and how they work together.
-</aside>
+In practice, you will probably want to start new Arachne projects using Arachne's [project generator](../quick-start.md) However, when learning Arachne, it is instructive to go through this excercise and create each part piece by piece, to gain an understanding of what the parts are and how they work together.
 
 To make the most of this particular tutorial, you will be most effective if you already:
 
@@ -43,6 +41,7 @@ Edit the `project.clj` file to contain the following contents:
                  [org.arachne-framework/arachne-core "<arachne-core-version>"]
                  [datascript "0.15.5"]
                  [ch.qos.logback/logback-classic "1.1.3"]]
+  :source-dirs ["src" "config"]
   :repositories [["arachne-dev"
                   "http://maven.arachne-framework.org/artifactory/arachne-dev"]])
 ````
@@ -52,6 +51,7 @@ You can just cut and paste for now, but if you're curious about what any of this
 - Arachne leverages the new `clojure.spec` library heavily, and therefore requires the latest alpha of Clojure 1.9
 - The version number for Arachne looks funky. WTF is `<arachne-core-version>` supposed to mean? Well, instead of using SNAPSHOT builds that are effectively mutable and can change underneath you, Arachne's dev builds are named with the following format: `<semver>-<branch>-<commit-idx>-<commit-sha>`. This guarantees that there is a unique version number for each dev build, and you can compare any two versions by looking at the commit-idx: we know that `0081` is newer than `0080` and older than `0082`. Eventually, we'll move to regular release versions, but for now working with dev builds is the best way to stay up-to-date. See the [Versions](../versions.md) page for a list of all the most recent development versions.
 - We've included DataScript on the classpath, but we also could have used [Datomic](http://www.datomic.com/get-datomic.html) or [Datomic Free](https://my.datomic.com/downloads/free). Arachne will detect which one is on your classpath and use whatever is present (there is also a way to specify explicitly which to use, if your project includes both Datomic and Datascript.)
+- In addition to your project source code, Arachne uses config scripts, conventionally stored in a directory named `config`. If you want these on the classpath, you have to specify this in leiningen.
 - Logging is provided by SLF4J, which is compatible with the logging used by most Clojure products (such as Datomic itself.) We can use any concrete logger that supports SLF4J. Logback is merely a common choice.
 - We need to add the `arachne-dev` repository explicitly, since Arachne is not yet deployed into Clojars or any other public maven repository.
 
@@ -110,35 +110,40 @@ What is an Arachne configuration? Well, it's data that specifies everything abou
 
 But, building a configuration by directly creating a Datomic database is awkward. It isn't hard, but it's verbose, and not very readable. And since the configuration is what defines the basic structure of our application, we want it to be _super_ readable.
 
-So Arachne provides a DSL (domain specific language) oriented specifically towards writing configuration data. Instead of writing a database, you can just write a _config script_, and when the config script is executed, it will populate the config database with everything it needs.
+So Arachne provides a DSL (domain specific language) oriented specifically towards writing configuration data. Instead of writing a database, you can just write a namespace containing a _config script_, and when the config namespace is loaded by Arachne, it will populate the config database with everything it needs.
 
-So what does a config script look like? For our very simple app, it looks like this:
+So what does a config namespace look like? For our very simple app, it looks like this:
 
 ````clojure
-(require '[arachne.core.dsl :as a])
+(ns ^:config myproj.config
+    (:require [arachne.core.dsl :as a]))
 
-(a/component :myproj/widget-1 'myproj.core/make-widget)
+(a/id :myproj/widget-1 (a/component 'myproj.core/make-widget))
 
-(a/runtime :myproj/runtime [:myproj/widget-1])
+(a/id :myproj/runtime (a/runtime [:myproj/widget-1]))
 ````
 
-Save this to a file called `config/myproj.clj` in your project directory.
+Save this to a file called `config/myproj/config.clj` in your project directory.
 
 There are two things worth unpacking here, before we dive into what these forms mean.
 
-First, you will notice that the file has no namespace. That is fully intentional. It is _not part of your project's codebase_. It is a config script. No code should require it. It's not in your `/src` directory, so it isn't even on the classpath!
+First, you will notice that the namespace has some `^:config` metadata. This is to signal that although it is a valid Clojure namespace, it is _not part of your project's codebase_. It is a config script, and serves a different purpose than does a standard Clojure namespace.
 
 In a very real sense, your config script is an entirely separate mini-program that has only one job: generating a config. Your *real* application will read that config and execute an application based on it. We happen to be using the same JVM for both programs, here, and using an "in memory" only config, because it's convenient. But it's theoretically possible to evaluate a config script, store the resulting config in a persistent database, shut down your computer, and then hand the config to an application and have it run at some point in the distant future.
 
-Second, you can't evaluate these forms at the REPL. Sorry. This is because each time one of these config DSL forms is evaluated, it updates the "current configuration" (stored in an atom in a dynamic var, if you're curious how that works.) If you're just in a regular old REPL, there _is_ no current configuration, and so trying to call a DSL form will throw an error.
+This is also why the config code is in a separate directory, which we have added to the classpath in `project.clj`. This further emphasizes its separation from the main application codebase.
+
+Second, you can't evaluate these forms at the REPL. Sorry. This is because each time one of these config DSL forms is evaluated, it updates the "current configuration" (stored in an atom in a dynamic var, if you're curious how that works.) If you're just in a regular old REPL, there _is_ no current configuration, and so trying to call a DSL form will throw an error. So you can't just require a config namespace from anywhere: Arachne needs to control the loading of config namespaces and make sure the correct environment is set up.
 
 With that out of the way, let's talk about what these functions do.
 
-The `arachne.core.dsl/component` function defines a component, in the configuration. The first argument (here the keyword `:myproj/widget-1`) is a unique ID for our component. Anywhere in our config where we refer to `:myproj/widget-1`, we're talking about the same entity in the configuration DB.
+`arachne.core/id` assigns an "Arachne ID" (a qualified keyword) to a an entity in the config. Arachne IDs are used pervasively to provide a human and machine-readable name to refer to config entities.
 
-The second argument is a quoted symbol, identifying the constructor function to use when actually creating the component instance. Understand, the config DSL function only *identifies* the constructor function; it isn't called yet! It's merely stored in the config, to be used when your app finally starts.
+The `arachne.core.dsl/component` function defines a component, in the configuration. The argument is a quoted symbol, identifying the constructor function to use when actually creating the component instance. Understand, the config DSL function only *identifies* the constructor function; it isn't called yet! It's merely stored in the config, to be used when your app finally starts.
 
-The `arachne.core.dsl/component` function also takes an optional third argument, to specify the dependencies of the component, but we'll ignore that for now.
+Then, we use `arachne.core/id` on the return value to name the component we just created, giving it an Arachne ID of `:myproj/widget-1`. So anywhere else we refer to `:myproj/widget-1`, we will be referring to that same config entity.
+
+The `arachne.core.dsl/component` function also takes an optional second argument, to specify the dependencies of the component, but we'll ignore that for now.
 
 The `arachne.core.dsl/runtime` function defines a named _runtime entity_ in the application's configuration. The runtime entity groups components together and specifies which ones should be instantiated when an Arachne program starts. When we actually run our program, we'll see that we have to tell Arachne which runtime we want to use, which in turn indicates the set of components that we want started.
 
@@ -152,12 +157,12 @@ To do this, we need write an `arachne.edn` file, somewhere on our classpath, tha
 
 ````clojure
 [{:arachne/name :myproj/app
-  :arachne/inits ["config/myproj.clj"]
+  :arachne/inits [myproj.config]
   :arachne/dependencies [:org.arachne-framework/arachne-core]}]
 ````
 
 - `:arachne/name` is just the name of our application as a whole.
-- `:arachne/inits` is a vector of  "initializers" to use. Initializers come in many flavors (for example, you can pass in raw Datomic transactions to the config) but here, we're just going to give it the process-relative filename of the config script that we wrote in the previous section.
+- `:arachne/inits` is a vector of  "initializers" to use. Initializers come in many flavors (for example, you can pass in raw Datomic transactions to the config) but here, we're just going to give it the name of the config namespace that we wrote in the previous section.
 - `:arachne/dependencies` specifies the module names of the Arachne modules that we want to depend on. For this rudimentary example, that's just the core module, named `:org.arachne-framework/arachne-core`. All the modules we want to use must also be on the classpath (that is, specified in our `project.clj`, which `arachne.core` is.)
 
 That's it! Our Arachne application is now ready to run.
@@ -167,7 +172,8 @@ At this point, your project directory structure should look like this:
 ````
 myproj
 ├── config
-│   └── myproj.clj
+│   └── myproj
+│       └── config.clj
 ├── project.clj
 ├── resources
 │   └── arachne.edn
@@ -283,14 +289,14 @@ There is one final thing you should be aware of when developing an Arachne appli
 To see what happens when something goes wrong, lets tweak our config script to pass an invalid name for our component: a keyword with no namespace:
 
 ````clojure
-(a/component :widget-1 'myproj.core/make-widget)
+(a/id :widget-1 (a/component 'myproj.core/make-widget))
 ````
 
 When we try to build a config based on this script, it throws an exception:
 
 ````clojure
 (def cfg (arachne/config :myproj/app))
-;; CompilerException arachne.ArachneException: Error initializing module `:myproj/app` (type = :arachne.core.module/error-in-initializer), compiling:(form-init8542683170413574929.clj:1:10)
+;;CompilerException arachne.ArachneException: Arguments to `arachne.core.dsl/id` did not conform to registered spec (type = :arachne.error/invalid-args), compiling:(myproj/config.clj:4:1)
 ````
 
 This should look quite familiar to anyone who has experience with Clojure development... in that it isn't very helpful. Of course we can obtain a bit more information with some digging...
@@ -298,16 +304,15 @@ This should look quite familiar to anyone who has experience with Clojure develo
 ````
 (.printStackTrace *e)
 
-arachne.ArachneException: Error initializing module `:myproj/app` (type = :arachne.core.module/error-in-initializer), compiling:(form-init8542683170413574929.clj:1:10)
-	at clojure.lang.Compiler$InvokeExpr.eval(Compiler.java:3657)
-  	at clojure.lang.Compiler$DefExpr.eval(Compiler.java:451)
-    at clojure.lang.Compiler.eval(Compiler.java:6983)
+arachne.ArachneException: Error initializing module `:myproj/app` (type = :arachne.core.module/error-in-initializer)
+	at arachne.error$arachne_ex.invokeStatic(error.clj:132)
+	at arachne.error$arachne_ex.invoke(error.clj:123)
 
-<SNIP MANY MANY LINES>
+   <SNIP MANY MANY LINES>
 
-	at arachne.core.module$initialize$fn__5505.invoke(module.clj:161)
-	... 48 more
-Caused by: arachne.ArachneException: Arguments to `arachne.core.dsl/component` did not conform to registered spec (type = :arachne.error/invalid-args)
+	at arachne.core.module$initialize$fn__4038.invoke(module.clj:162)
+	... 51 more
+Caused by: arachne.ArachneException: Arguments to `arachne.core.dsl/id` did not conform to registered spec (type = :arachne.error/invalid-args)
 	at arachne.error$arachne_ex.invokeStatic(error.clj:132)
 	at arachne.error$arachne_ex.invoke(error.clj:123)
 	at arachne.error$assert.invokeStatic(error.clj:60)
@@ -317,17 +322,18 @@ Caused by: arachne.ArachneException: Arguments to `arachne.core.dsl/component` d
 	at clojure.lang.RestFn.applyTo(RestFn.java:139)
 	at clojure.core$apply.invokeStatic(core.clj:659)
 	at clojure.core$apply.invoke(core.clj:652)
-	at arachne.core.dsl$component.invokeStatic(dsl.clj:57)
-	at arachne.core.dsl$component.doInvoke(dsl.clj:57)
+	at arachne.core.dsl$id.invokeStatic(dsl.clj:47)
+	at arachne.core.dsl$id.doInvoke(dsl.clj:47)
 	at clojure.lang.RestFn.invoke(RestFn.java:421)
-	at arachne_init_script_8334492e_a146_4e04_98ec_e1f15e1976f1$eval10065.invokeStatic(myproj.clj:3)
-	at arachne_init_script_8334492e_a146_4e04_98ec_e1f15e1976f1$eval10065.invoke(myproj.clj:3)
+	at myproj.config$eval9782.invokeStatic(config.clj:4)
+	at myproj.config$eval9782.invoke(config.clj:4)
 	at clojure.lang.Compiler.eval(Compiler.java:6978)
 	at clojure.lang.Compiler.load(Compiler.java:7430)
-	... 56 more
+	... 78 more
+nil
 ````
 
-If you manage to read through all that, you might eventually discover something helpful: it looks like there was something wrong with the arguments to `arachne.core.dsl/component`. Fine.
+If you manage to read through all that, you might eventually discover something helpful: it looks like there was something wrong with the arguments to `arachne.core.dsl/id`. Fine.
 
 Fortunately, with Arachne, there is a slightly better alternative: invoke `(arachne.error/explain)`, with no arguments, at the REPL. This will produce a pretty-printed view of the last top-level exception (the onecurrently bound to `*e`, in Clojure's REPL).
 

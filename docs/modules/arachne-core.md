@@ -38,8 +38,9 @@ Each module definition map may contain the following keys:
 An initializer (as defined in the module definition map) may be one of the following concrete types:
 
 - A _fully qualified symbol_ is interpreted as the name of a function, which is expected to take a configuration value and return a (possibly updated) configuration.
+- An _unqualified symbol_ is interpreted as the name of a namespace, which will be loaded with the `arachne.core.config.script/*config*` dynamic var bound to an atom containing the configuration. The presumption is that DSL forms in the config script will update the context configuration imperatively using `swap!`.
 - A _vector_ is assumed to be valid Datomic/DataScript transaction data and is transacted directly to the config.
-- A _string_ is interpreted as the process-relative path to a configuration DSL script, which will be evaluated using Clojure's `load-file` function with the `arachne.core.config.script/*config*` dynamic var bound to an atom containing the configuration. The presumption is that DSL forms in the config script will update the configuration using `swap!`.
+- A _string_ is interpreted as the process-relative path to a configuration DSL script, which will be evaluated using Clojure's `load-file` function with a context config bound.
 - Any other _list_ is evaluated by `eval` as a config script (with `*config*` bound.)
 
 ### Runtime
@@ -97,6 +98,7 @@ Base Components may have the following attributes:
 
 The `arachne.core.dsl` namespace defines the following config DSL functions, which operate on the context config.
 
+- [`id`](../api/arachne.core.dsl.html#var-id) allows you to assign an Arachne ID to a component.
 - [`transact`](../api/arachne.core.dsl.html#var-transact) allows you to apply transaction data directly.
 - [`component`](../api/arachne.core.dsl.html#var-component) creates a component entity with the specified Arachne ID and constructor.
 - [`runtime`](../api/arachne.core.dsl.html#var-runtime) defines a runtime entity with the specified Arachne ID set of dependent components.

@@ -31,7 +31,7 @@ Then, we need to update the `arachne.edn` file to indicate that our application 
 
 ````clojure
 [{:arachne/name :myproj/app
-  :arachne/inits ["config/myproj.clj"]
+  :arachne/inits [myproj.config]
   :arachne/dependencies [:org.arachne-framework/arachne-pedestal]}]
 ````
 
@@ -61,7 +61,7 @@ First, we will need to define a Component representing our handler function. Add
 ````
 (require '[arachne.http.dsl :as h])
 
-(h/handler :myproj/hello 'myproj.core/hello-handler)
+(a/id :myproj/hello (h/handler 'myproj.core/hello-handler))
 ````
 
 The `arachne.http.dsl/handler` function looks very much like the `arachne.core.dsl/component` function we used earlier. This is no accident! In fact, `handler` is actually defining a component, too: just a specific kind of component. The difference is that the function specified should identify a handler function (the one we just wrote) instead of being a constructor that can return an arbitrary object. Note that we still need to give our handler component a name: `:myproj/hello`. We'll need to refer to this in the next step.
@@ -71,18 +71,15 @@ Next, we will add some DSL forms that define a HTTP server, and tell it how to s
 ````clojure
 (require '[arachne.pedestal.dsl :as p])
 
-(p/server :myproj/server 8080
+(a/id :myproj/server
+  (p/server 8080
 
-  (h/endpoint :get "/" :myproj/hello)
+    (h/endpoint :get "/" :myproj/hello)
 
-  )
+  ))
 ````
 
 The `arachne.pedestal.dsl/server` form creates yet another component entity named `:myproj/server`. Instead of passing a symbol that identifies a constructor or a handler function, `server` requires a port.
-
-<aside>
-See the pattern? Most Arachne DSL functions that define a component entity take the Arachne ID of the component as their first argument, and then other functions can refer to that ID to connect components together.
-</aside>
 
 Nested *inside* the server element, we declare a HTTP endpoint, using the `arachne.http.dsl/endpoint` function. This function takes three arguments:
 
@@ -97,27 +94,29 @@ Again, it cannot be emphasized enough: these DSL forms do not create an actual P
 There's just one more step: we need to tell Arachne that this HTTP server is part of our runtime, and should be started when the runtime starts. Replace the existing `a/runtime` call with:
 
 ````clojure
-(a/runtime :myproj/runtime [:myproj/server])
+(a/id :myproj/runtime (a/runtime [:myproj/server]))
 ````
 
 At this point, your full configuration script should look something like this:
 
 ````clojure
-(require '[arachne.core.dsl :as a])
-(require '[arachne.http.dsl :as h])
-(require '[arachne.pedestal.dsl :as p])
+(ns ^:config myproj.config
+  (:require [arachne.core.dsl :as a]
+            [arachne.http.dsl :as h]
+            [arachne.pedestal.dsl :as p]))
 
-(a/component :myproj/widget-1 'myproj.core/make-widget)
+(a/id :myproj/widget-1 (a/component 'myproj.core/make-widget))
 
-(a/runtime :myproj/runtime [:myproj/server])
+(a/id :myproj/runtime (a/runtime [:myproj/server]))
 
-(h/handler :myproj/hello 'myproj.core/hello-handler)
+(a/id :myproj/hello (h/handler 'myproj.core/hello-handler))
 
-(p/server :myproj/server 8080
+(a/id :myproj/server
+  (p/server 8080
 
-  (h/endpoint :get "/" :myproj/hello)
+    (h/endpoint :get "/" :myproj/hello)
 
-  )
+    ))
 ````
 
 ### Running the server
@@ -191,14 +190,14 @@ This means that the following three forms are equivalent:
 ````
 
 ````clojure
-(h/handler :myproj/greeter 'myproj.core/greeter)
+(a/id :myproj/greeter (h/handler 'myproj.core/greeter))
 (h/endpoint :get "/greet/:name" :myproj/greeter)
 ````
 
-And, of course, we could both define a handler inline *and* give it an Arachne ID:
+And, of course, we could both define a handler inline *and* give it an Arachne ID, because the `arachne.core.dsl/id` function returns the entity ID to which it just assigned an Arachne ID:
 
 ````clojure
-(h/endpoint :get "/greet/:name" (h/handler :myproj/greeter 'myproj.core/greeter))
+(h/endpoint :get "/greet/:name" (ai/id :myproj/greeter (h/handler 'myproj.core/greeter)))
 ````
 
 You can use whichever of these variations leads to the cleanest and most readable config scripts.
@@ -212,7 +211,7 @@ If you were looking for it, you might also have noticed that we're not getting t
 If we did want to have our custom component to start up, we can add it to the runtime, along with our HTTP server, like so:
 
 ````
-(a/runtime :myproj/runtime [:myproj/server :myproj/widget-1])
+(a/id :myproj/runtime (a/runtime [:myproj/server :myproj/widget-1]))
 ````
 
 Now, our custom component will start up alongside the server itself.
