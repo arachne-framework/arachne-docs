@@ -240,10 +240,30 @@
 <li>Cohesion. Despite being highly modular, each module exposes clear integration points, allowing modules to build on eachother to deliver highly sophisticated composite behavior.</li>
 <li>Data-driven. Each Arachne application is, at heart, a database specifying what programmatic entities exist and how they are linked.</li>
 </ul>
-<h2>Getting Started</h2>
+<h2>Quick Start</h2>
 
-<p>If you're just getting started, you'll probably want to try out the tutorials.</p>
-<p>These will walk you through the process of creating a new Arachne application, introducing the essential concepts and code along the way.</p>
+<p>Arachne provides a basic command-line project generator tool that you can use to create projects. To install this tool, simply download the shell script, place it somewhere on your system path (<code>~/bin</code> is usually good), and <code>chmod</code> it to be executable.</p>
+<pre><code class="bash">URL=&quot;https://raw.githubusercontent.com/arachne-framework/arachne-proj-gen/release/arachne.sh&quot;
+curl $URL &gt; ~/bin/arachne
+chmod +x ~/bin/arachne
+</code></pre>
+
+<p>Then, you can call it anywhere to create a new project, using the syntax <code>arachne new &lt;project-name&gt; &lt;template&gt;</code>, where the project name is a <em>fully qualified</em> Clojure symbol, and the template is the Git URI of a template repository.</p>
+<p>The namespace portion of the project name tells Arachne what kind of namespace structure to use for your project.</p>
+<p>A good template to get started with is the <code>enterprise-spa</code>, which sets up a robust single-page Arachne that uses Leiningen, Datomic, ClojureScript, Figwheel and Rum.</p>
+<p>For example:</p>
+<pre><code class="bash">arachne new my.org/myapp git@github.com:arachne-framework/enterprise-spa.git
+</code></pre>
+
+<p>That's it! You've generated a project into a directory named <code>myapp</code>. You can open up your favorite editor and start hacking, or run it right away:</p>
+<pre><code class="bash">cd myapp
+lein run :my.org/myapp :my.org.myapp/runtime
+</code></pre>
+
+<p>You'll see it compile some ClojureScript, and then you can try it out by hitting <code>http://localhost:8080</code> in your browser.</p>
+<h2>Tutorials</h2>
+
+<p>The above technique lets you get started quickily, but if you want to actually understand what's going on you'll probably want to try out the tutorials. These build a similar project, but break it down step by step and explain every concept as it appears.</p>
 <ol>
 <li><a href="tutorials/creating-a-project/">creating a new project</a></li>
 <li><a href="tutorials/http-requests/">handling HTTP requests</a></li>
@@ -325,5 +345,5 @@
 
 <!--
 MkDocs version : 0.16.1
-Build Date UTC : 2017-02-22 20:11:33
+Build Date UTC : 2017-03-03 15:55:35
 -->

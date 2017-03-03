@@ -258,10 +258,10 @@
 <p>If you are interested in the formal definition of a component in Arachne, and more details about how they work, see the <a href="../../modules/arachne-core/#Components">conceptual documentation</a> for components in the documentation for the Arachne Core module.</p>
 <h2 id="building-components">Building Components</h2>
 <p>In the <a href="../creating-a-project/">first tutorial</a>, we defined a basic component in our configuration using the <code>arachne.core.dsl/component</code> DSL form:</p>
-<pre><code class="clojure">(a/component :myproj/widget-1 'myproj.core/make-widget)
+<pre><code class="clojure">(a/id :myproj/widget-1 (a/component 'myproj.core/make-widget))
 </code></pre>
 
-<p>A quick recap: this defines a component with an Arachne ID of <code>:myproj/widget-1</code>, that invokes the <code>myproj.core/make-widget</code> function during startup to actually obtain an instance of the component.</p>
+<p>A quick recap: this defines a component that invokes the <code>myproj.core/make-widget</code> function during startup to actually obtain an instance of the component. Then, it is assigned an Arachne ID of <code>:myproj/widget-1</code>.</p>
 <p>In this tutorial, we will replace this component with a new one that is actually meaningful, instead of a meaningless "widget."</p>
 <p>We're going to create a component which is a proxy to a public API (http://robohash.org) that creates cute robot avatars based on some input text. Each text string generates an image of a unique robot, based on the provided text. For example, the string <code>"Luke"</code> generates the following image:</p>
 <p><img alt="robot avatar" src="../../img/luke-robot.png" /></p>
@@ -300,7 +300,7 @@
 <p>Note that we haven't implemented the <code>com.stuartsierra.component/Lifecycle</code> protocol; that's fine. Our component is stateless, and so we don't need it. We'll see an example of writing a stateful component later on.</p>
 <h3 id="configuration">Configuration</h3>
 <p>Now that we have all the code we need, we can define a component to our Arachne config. Replace the definition of <code>:myproj/widget-1</code> in your config builder script (<code>config/myproj.dsl</code>).</p>
-<pre><code class="clojure">(a/component :myproj/robohash 'myproj.visual-hash/new-robohash)
+<pre><code class="clojure">(a/id :myproj/robohash (a/component 'myproj.visual-hash/new-robohash))
 </code></pre>
 
 <p>We can then define a handler endpoint with a dependency on <code>:myproj/robohash</code>:</p>
@@ -310,23 +310,25 @@
 
 <p>This is just like the "hello world" handler we defined; the only difference is that we've added a <em>dependency map</em> as an additional argument to the <code>arachne.core.dsl/handler</code> DSL function. For handlers, the dependency map is a map of <em>keys</em> to <em>component references</em>. The key is the key that will be added to the request map. The component reference may be either an Arachne ID (as it is here), or the entity ID of a component in the configuration.</p>
 <p>After cleaning up all the other references to <code>:myproj/widget-1</code>, the config DSL script should look like this:</p>
-<pre><code class="clojure">(require '[arachne.core.dsl :as a])
-(require '[arachne.http.dsl :as h])
-(require '[arachne.pedestal.dsl :as p])
+<pre><code class="clojure">(ns ^:config myproj.config
+   (:require [arachne.core.dsl :as a]
+             [arachne.http.dsl :as h]
+             [arachne.pedestal.dsl :as p]))
 
-(a/component :myproj/robohash 'myproj.visual-hash/new-robohash)
+(a/id :myproj/robohash (a/component 'myproj.visual-hash/new-robohash))
 
-(a/runtime :myproj/runtime [:myproj/server])
+(a/id :myproj/runtime (a/runtime [:myproj/server]))
 
-(h/handler :myproj/hello 'myproj.core/hello-handler)
+(a/id :myproj/hello (h/handler 'myproj.core/hello-handler))
 
-(p/server :myproj/server 8080
+(a/id :myproj/server
+  (p/server 8080
 
-  (h/endpoint :get &quot;/&quot; :myproj/hello)
-  (h/endpoint :get &quot;/greet/:name&quot; (h/handler 'myproj.core/greeter))
-  (h/endpoint :get &quot;/robot/:name&quot; (h/handler 'myproj.core/robot
+    (h/endpoint :get &quot;/&quot; :myproj/hello)
+    (h/endpoint :get &quot;/greet/:name&quot; (h/handler 'myproj.core/greeter))
+    (h/endpoint :get &quot;/robot/:name&quot; (h/handler 'myproj.core/robot
                                     {:hash-component :myproj/robohash}))
-  )
+    ))
 </code></pre>
 
 <h2 id="handler-dependencies">Handler Dependencies</h2>
@@ -381,7 +383,7 @@
 <li>When we get a request for a name we <em>have</em> seen before, we return the cached value.</li>
 <li>We can't store <code>InputStream</code> objects, so we need a tool for converting from an <code>InputStream</code> to something we can store, and back again.</li>
 </ol>
-<p>This also implies that our component is stateful, since it needs to store a mutable cache of values. Fortunately, Clojure makes this easy, using an atom.</p>
+<p>This also implies that our component is stateful, since it needs to store a mutable cache of values. Fortunately, Clojure makes this safe and easy, using an atom.</p>
 <p>For reading <code>InputStream</code> objects into a value we can store, and then spitting them back out again, we will use the <code>org.apache.commons.io.IOUtils</code> class, which is already included in our project via a transitive Arachne dependency.</p>
 <p>Finally, rather than caching requests specifically to http://robohash.org and re-implementing the network logic we already wrote, we can use the existing <code>RoboHash</code> component as a <em>delegate</em>, which has the pleasant side effect of making our caching component more pluggable as well (it will work out of the box with any other component that satisfies the <code>VisualHash</code> protocol.)</p>
 <p>Armed with this information we can define a new component in the <code>myproj.value-hash</code> namespace:</p>
@@ -415,7 +417,7 @@
 
 <h4 id="in-the-config">In the Config</h4>
 <p>We now have the ability to construct a <code>VisualHash</code> component that caches values, delegating cache misses to <em>another</em> <code>VisualHash</code> component. We can set this up by adding a dependency map to the <code>arachne.core.dsl/component</code> DSL form:</p>
-<pre><code class="clojure">(a/component :myproj/hashcache 'myproj.visual-hash/new-cache {:delegate :myproj/robohash})
+<pre><code class="clojure">(a/id :myproj/hashcache (a/component 'myproj.visual-hash/new-cache {:delegate :myproj/robohash}))
 </code></pre>
 
 <p>The dependency map on a <code>component</code> works basically the same as it does for a <code>handler</code>, except instead of adding the dependency component on to each request, it is <code>assoc</code>'ed to the component instance itself immediately before its <code>start</code> method is called. This means that the <code>:delegate</code> field which <code>CachingVisualHash</code> uses is present and in place before it is used.</p>

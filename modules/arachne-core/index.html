@@ -273,8 +273,9 @@
 <p>An initializer (as defined in the module definition map) may be one of the following concrete types:</p>
 <ul>
 <li>A <em>fully qualified symbol</em> is interpreted as the name of a function, which is expected to take a configuration value and return a (possibly updated) configuration.</li>
+<li>An <em>unqualified symbol</em> is interpreted as the name of a namespace, which will be loaded with the <code>arachne.core.config.script/*config*</code> dynamic var bound to an atom containing the configuration. The presumption is that DSL forms in the config script will update the context configuration imperatively using <code>swap!</code>.</li>
 <li>A <em>vector</em> is assumed to be valid Datomic/DataScript transaction data and is transacted directly to the config.</li>
-<li>A <em>string</em> is interpreted as the process-relative path to a configuration DSL script, which will be evaluated using Clojure's <code>load-file</code> function with the <code>arachne.core.config.script/*config*</code> dynamic var bound to an atom containing the configuration. The presumption is that DSL forms in the config script will update the configuration using <code>swap!</code>.</li>
+<li>A <em>string</em> is interpreted as the process-relative path to a configuration DSL script, which will be evaluated using Clojure's <code>load-file</code> function with a context config bound.</li>
 <li>Any other <em>list</em> is evaluated by <code>eval</code> as a config script (with <code>*config*</code> bound.)</li>
 </ul>
 <h3 id="runtime">Runtime</h3>
@@ -315,6 +316,7 @@
 <h1 id="dsl">DSL</h1>
 <p>The <code>arachne.core.dsl</code> namespace defines the following config DSL functions, which operate on the context config.</p>
 <ul>
+<li><a href="../../api/arachne.core.dsl.html#var-id"><code>id</code></a> allows you to assign an Arachne ID to a component.</li>
 <li><a href="../../api/arachne.core.dsl.html#var-transact"><code>transact</code></a> allows you to apply transaction data directly.</li>
 <li><a href="../../api/arachne.core.dsl.html#var-component"><code>component</code></a> creates a component entity with the specified Arachne ID and constructor.</li>
 <li><a href="../../api/arachne.core.dsl.html#var-runtime"><code>runtime</code></a> defines a runtime entity with the specified Arachne ID set of dependent components.</li>
