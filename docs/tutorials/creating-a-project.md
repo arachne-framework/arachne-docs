@@ -41,7 +41,7 @@ Edit the `project.clj` file to contain the following contents:
                  [org.arachne-framework/arachne-core "<arachne-core-version>"]
                  [datascript "0.15.5"]
                  [ch.qos.logback/logback-classic "1.1.3"]]
-  :source-dirs ["src" "config"]
+  :source-paths ["src" "config"]
   :repositories [["arachne-dev"
                   "http://maven.arachne-framework.org/artifactory/arachne-dev"]])
 ````
