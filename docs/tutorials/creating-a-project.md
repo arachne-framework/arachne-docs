@@ -137,7 +137,7 @@ Second, you can't evaluate these forms at the REPL. Sorry. This is because each 
 
 With that out of the way, let's talk about what these functions do.
 
-`arachne.core/id` assigns an "Arachne ID" (a qualified keyword) to a an entity in the config. Arachne IDs are used pervasively to provide a human and machine-readable name to refer to config entities.
+`arachne.core.dsl/id` assigns an "Arachne ID" (a qualified keyword) to a an entity in the config. Arachne IDs are used pervasively to provide a human and machine-readable name to refer to config entities.
 
 The `arachne.core.dsl/component` function defines a component, in the configuration. The argument is a quoted symbol, identifying the constructor function to use when actually creating the component instance. Understand, the config DSL function only *identifies* the constructor function; it isn't called yet! It's merely stored in the config, to be used when your app finally starts.
 
