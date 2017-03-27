@@ -335,7 +335,7 @@ nil
 
 If you manage to read through all that, you might eventually discover something helpful: it looks like there was something wrong with the arguments to `arachne.core.dsl/id`. Fine.
 
-Fortunately, with Arachne, there is a slightly better alternative: invoke `(arachne.error/explain)`, with no arguments, at the REPL. This will produce a pretty-printed view of the last top-level exception (the onecurrently bound to `*e`, in Clojure's REPL).
+Fortunately, with Arachne, there is a slightly better alternative: invoke `(arachne.error/explain)`, with no arguments, at the REPL. This will produce a pretty-printed view of the last top-level exception (the one currently bound to `*e`, in Clojure's REPL).
 
 The output of `explain` is still extremely verbose. It still lists the full stacktrace because, well, sometimes you need that. However, it is colored and highlighted in such a way that with a bit of scrolling you will eventually see something like this:
 
