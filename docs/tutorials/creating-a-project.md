@@ -57,7 +57,7 @@ You can just cut and paste for now, but if you're curious about what any of this
 
 ### Writing a component
 
-Arachne uses Stuart Sierra's "Component" library as the foundation of its runtime system. Component defines a the concept of a "component" (often called a "SierraComponent"), which is a (possibly stateful) object that can be started and stopped, as part of a larger system. SierraComponents can also have dependencies on eachother: more on that in the tutorial on [dependency injection](dependency-injection.md).
+Arachne uses Stuart Sierra's "Component" library as the foundation of its runtime system. Component defines the concept of a "component" (often called a "SierraComponent"), which is a (possibly stateful) object that can be started and stopped, as part of a larger system. SierraComponents can also have dependencies on eachother: more on that in the tutorial on [dependency injection](dependency-injection.md).
 
 To get started with the simplest possible Arachne application, we need to do two things:
 
