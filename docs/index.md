@@ -8,7 +8,7 @@ Arachne is a web framework for Clojure. It aims to be more than a collection of 
 
 It intends to exhibit the following qualities:
 
-- Modularity. Each aspect of Arachne's functionality is delivered as a separate
+- Modularity. Each aspect of Arachne's functionality is delivered as a separate module.
 - Cohesion. Despite being highly modular, each module exposes clear integration points, allowing modules to build on eachother to deliver highly sophisticated composite behavior.
 - Data-driven. Each Arachne application is, at heart, a database specifying what programmatic entities exist and how they are linked.
 
