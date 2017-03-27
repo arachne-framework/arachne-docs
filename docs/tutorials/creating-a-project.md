@@ -141,7 +141,7 @@ With that out of the way, let's talk about what these functions do.
 
 The `arachne.core.dsl/component` function defines a component, in the configuration. The argument is a quoted symbol, identifying the constructor function to use when actually creating the component instance. Understand, the config DSL function only *identifies* the constructor function; it isn't called yet! It's merely stored in the config, to be used when your app finally starts.
 
-Then, we use `arachne.core/id` on the return value to name the component we just created, giving it an Arachne ID of `:myproj/widget-1`. So anywhere else we refer to `:myproj/widget-1`, we will be referring to that same config entity.
+Then, we use `arachne.core.dsl/id` on the return value to name the component we just created, giving it an Arachne ID of `:myproj/widget-1`. So anywhere else we refer to `:myproj/widget-1`, we will be referring to that same config entity.
 
 The `arachne.core.dsl/component` function also takes an optional second argument, to specify the dependencies of the component, but we'll ignore that for now.
 
