@@ -93,7 +93,7 @@
                 <li class="toctree-l3"><a href="#writing-a-handler-function">Writing a handler function</a></li>
                 
             
-                <li class="toctree-l3"><a href="#server-configuraton">Server configuraton</a></li>
+                <li class="toctree-l3"><a href="#server-configuration">Server configuration</a></li>
                 
             
                 <li class="toctree-l3"><a href="#running-the-server">Running the server</a></li>
@@ -288,7 +288,7 @@
 
 <p>This function just responds with <code>"Hello, world!"</code> to any incoming request. Easy enough!</p>
 <p>This is literally all of the project code we need to write to turn our application into a web application. Everything else will be defined in the Arachne configuration.</p>
-<h3 id="server-configuraton">Server configuraton</h3>
+<h3 id="server-configuration">Server configuration</h3>
 <p>Now, for the interesting part: updating the config script to start a HTTP server serving up our handler.</p>
 <p>First, we will need to define a Component representing our handler function. Add the following to your config script:</p>
 <pre><code>(require '[arachne.http.dsl :as h])
