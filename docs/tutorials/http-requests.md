@@ -52,7 +52,7 @@ This function just responds with `"Hello, world!"` to any incoming request. Easy
 
 This is literally all of the project code we need to write to turn our application into a web application. Everything else will be defined in the Arachne configuration.
 
-### Server configuraton
+### Server configuration
 
 Now, for the interesting part: updating the config script to start a HTTP server serving up our handler.
 
