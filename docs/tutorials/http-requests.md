@@ -1,6 +1,6 @@
 <h1>Handling HTTP Requests</h1>
 
-This tutorial extends the project started in the [getting started tutorial](creating-a-project.md) and adds the Pedestal module. It shows how to define and start a HTTP server, and handle incoming HTTP requests using custom handlers functions.
+This tutorial extends the project started in the [getting started tutorial](creating-a-project.md) and adds the Pedestal module. It shows how to define and start an HTTP server, and handle incoming HTTP requests using custom handlers functions.
 
 You can find the complete source code used in this tutorial on [Github](https://github.com/arachne-framework/arachne-docs/tree/master/tutorial-code/http-requests).
 
@@ -8,7 +8,7 @@ To make the most of this particular tutorial, you will be most effective if you 
 
 ### Enabling the Pedestal module
 
-To make our application into an HTTP server, we'll need add the [arachne-pedestal](../modules/arachne-pedestal.md) Arachne module to our app. [Pedestal](http://pedestal.io) is an industrial strength HTTP server for Clojure, and Arachne wraps it, inheriting the benefits that it provides.
+To make our application into an HTTP server, we'll need to add the [arachne-pedestal](../modules/arachne-pedestal.md) Arachne module to our app. [Pedestal](http://pedestal.io) is an industrial strength HTTP server for Clojure, and Arachne wraps it, inheriting the benefits that it provides.
 
 <aside>
 <p>The <code>arachne-pedestal</code> module uses Pedestal, as do many of Arachne's official modules, because we needed to pick <i>some</i> http server and Pedestal fit the bill nicely. However, there's nothing about Arachne itself that requires Pedestal; in theory you could also (for example) build an "arachne-ring" module to fill the same role. Most of Arachne's container-agnostic HTTP concepts and handling code is already pulled out into a separate <code>arachne-http</code> module (which <code>arachne-pedestal</code> depends on) and could be freely reused.</p>
@@ -54,7 +54,7 @@ This is literally all of the project code we need to write to turn our applicati
 
 ### Server configuration
 
-Now, for the interesting part: updating the config script to start a HTTP server serving up our handler.
+Now, for the interesting part: updating the config script to start an HTTP server serving up our handler.
 
 First, we will need to define a Component representing our handler function. Add the following to your config script:
 
@@ -66,7 +66,7 @@ First, we will need to define a Component representing our handler function. Add
 
 The `arachne.http.dsl/handler` function looks very much like the `arachne.core.dsl/component` function we used earlier. This is no accident! In fact, `handler` is actually defining a component, too: just a specific kind of component. The difference is that the function specified should identify a handler function (the one we just wrote) instead of being a constructor that can return an arbitrary object. Note that we still need to give our handler component a name: `:myproj/hello`. We'll need to refer to this in the next step.
 
-Next, we will add some DSL forms that define a HTTP server, and tell it how to serve our handler function:
+Next, we will add some DSL forms that define an HTTP server, and tell it how to serve our handler function:
 
 ````clojure
 (require '[arachne.pedestal.dsl :as p])
@@ -81,7 +81,7 @@ Next, we will add some DSL forms that define a HTTP server, and tell it how to s
 
 The `arachne.pedestal.dsl/server` form creates yet another component entity named `:myproj/server`. Instead of passing a symbol that identifies a constructor or a handler function, `server` requires a port.
 
-Nested *inside* the server element, we declare a HTTP endpoint, using the `arachne.http.dsl/endpoint` function. This function takes three arguments:
+Nested *inside* the server element, we declare an HTTP endpoint, using the `arachne.http.dsl/endpoint` function. This function takes three arguments:
 
 - The HTTP method that this endpoint responds to, as a Clojure keyword. You may also pass a set of keywords if the endpoint can respond to multiple request types.
 - The route to which to "attach" the endpoint: requests to this route will be delegated to the endpoint.
@@ -145,7 +145,7 @@ Then, once logging is set up, we can run the server. Here, we'll use the command
 lein run :myproj/app :myproj/runtime
 ````
 
-You should see log output indicating that the server has started.
+After the version of Pedestal we specified in `project.clj` is downloaded (if it isn't already installed on your system), you should see log output indicating that the server has started.
 
 Hit the `http://localhost:8080/` URL to see your endpoint in action!
 
