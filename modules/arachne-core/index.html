@@ -279,7 +279,7 @@
 <li>Any other <em>list</em> is evaluated by <code>eval</code> as a config script (with <code>*config*</code> bound.)</li>
 </ul>
 <h3 id="runtime">Runtime</h3>
-<p>A <em>runtime</em> is the top-level executable unit of an Arachne application. While the word "application" or "module" is usually used to refer to the codebase and project structure, a <em>runtime</em> is a named entity that specifies exactly what should happen when it is started and stopped. A single application can contain any number of runtimes, and they may be started and stopped independently of eachother (as long as they do not attempt to utilize the same resources such as network ports.).</p>
+<p>A <em>runtime</em> is the top-level executable unit of an Arachne application. While the word "application" or "module" is usually used to refer to the codebase and project structure, a <em>runtime</em> is a named entity that specifies exactly what should happen when it is started and stopped. A single application can contain any number of runtimes, and they may be started and stopped independently of eachother (as long as they do not attempt to utilize the same resources such as network ports).</p>
 <p>A runtime exists first as data in the configuration, a runtime <em>entity</em> that is defined along with the rest of the configuration. When a runtime is launched, the entity is used to instantiate an actual JVM object which is the runtime itself.</p>
 <h5 id="runtime-object">Runtime Object</h5>
 <p>A runtime object obtained by calling <code>arachne.core/runtime</code>, and passing a configuration and the Arachne ID of a runtime entity. This will yield an instance of <code>arachne.runtime/ArachneRuntime</code>, which satisfies <code>com.stuartsierra.component/Lifecycle</code>.</p>
@@ -311,7 +311,7 @@
 <ul>
 <li><code>:arachne/id</code> is a qualified keyword that serves to uniquely name a component within a configuration. For components, an <code>:arachne/id</code> is optional.</li>
 <li><code>:arachne.component/constructor</code> is mandatory. Under the hood, every component must have a constructor. This is a namespace-qualified keyword identifying a function that, when invoked, returns a runtime instance of the component.</li>
-<li><code>:arachne.component/dependencies</code> is a ref to any number of dependency entity. Each dependency entity has two attributes: <code>arachne.core.component.dependency/ref</code> is a reference to another component, and <code>:arachne.core.component.dependency/key</code> is a keyword. During the Arachne startup process, before each component is instantiated (by calling its constructor), the started instances of the components it depends on are <code>assoc</code>'d on using the specified key. If no key is specified, the dependency's entity ID is used as the key.</li>
+<li><code>:arachne.component/dependencies</code> is a ref to any number of dependency entities. Each dependency entity has two attributes: <code>arachne.core.component.dependency/ref</code> is a reference to another component, and <code>:arachne.core.component.dependency/key</code> is a keyword. During the Arachne startup process, before each component is instantiated (by calling its constructor), the started instances of the components it depends on are <code>assoc</code>'d on using the specified key. If no key is specified, the dependency's entity ID is used as the key.</li>
 </ul>
 <h1 id="dsl">DSL</h1>
 <p>The <code>arachne.core.dsl</code> namespace defines the following config DSL functions, which operate on the context config.</p>

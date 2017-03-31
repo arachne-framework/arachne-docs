@@ -299,7 +299,7 @@
 
 <p>Note that we haven't implemented the <code>com.stuartsierra.component/Lifecycle</code> protocol; that's fine. Our component is stateless, and so we don't need it. We'll see an example of writing a stateful component later on.</p>
 <h3 id="configuration">Configuration</h3>
-<p>Now that we have all the code we need, we can define a component to our Arachne config. Replace the definition of <code>:myproj/widget-1</code> in your config builder script (<code>config/myproj.dsl</code>).</p>
+<p>Now that we have all the code we need, we can define a component to our Arachne config. Replace the definition of <code>:myproj/widget-1</code> in your config builder script (<code>config/myproj/config.clj</code>).</p>
 <pre><code class="clojure">(a/id :myproj/robohash (a/component 'myproj.visual-hash/new-robohash))
 </code></pre>
 
@@ -334,14 +334,14 @@
 <h2 id="handler-dependencies">Handler Dependencies</h2>
 <p>Now, all that remains is to actually implement the <code>:myproj.core/robot</code> handler function.</p>
 <p>Because we defined it in the handler dependency map, we know that we'll have a <code>:hash-component</code> key available in each request, with our robot-building component as its value.</p>
-<p>We just need to invoke the <code>myproj.value-hash/vhash</code> protocol function on our component and the string we want to hash, to get an <code>InputStream</code> that we can return as the request body.</p>
+<p>We just need to invoke the <code>myproj.visual-hash/vhash</code> protocol function on our component and the string we want to hash, to get an <code>InputStream</code> that we can return as the response body.</p>
 <pre><code class="clojure">(defn robot
   [req]
   (let [name (get-in req [:path-params :name])
         c (:hash-component req)]
     {:status 200
      :headers {&quot;Content-Type&quot; &quot;image/png&quot;}
-     :body (vhash c name)}))
+     :body (myproj.visual/vhash c name)}))
 </code></pre>
 
 <p>We'll also need to set the content-type header, so the browser knows what kind of a byte stream we're sending it (we happen to know it's a PNG image.)</p>

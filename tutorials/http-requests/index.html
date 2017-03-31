@@ -253,11 +253,11 @@
               
                 <h1>Handling HTTP Requests</h1>
 
-<p>This tutorial extends the project started in the <a href="../creating-a-project/">getting started tutorial</a> and adds the Pedestal module. It shows how to define and start a HTTP server, and handle incoming HTTP requests using custom handlers functions.</p>
+<p>This tutorial extends the project started in the <a href="../creating-a-project/">getting started tutorial</a> and adds the Pedestal module. It shows how to define and start an HTTP server, and handle incoming HTTP requests using custom handlers functions.</p>
 <p>You can find the complete source code used in this tutorial on <a href="https://github.com/arachne-framework/arachne-docs/tree/master/tutorial-code/http-requests">Github</a>.</p>
 <p>To make the most of this particular tutorial, you will be most effective if you have already read and understood the material in the <a href="../creating-a-project/">getting started tutorial</a></p>
 <h3 id="enabling-the-pedestal-module">Enabling the Pedestal module</h3>
-<p>To make our application into an HTTP server, we'll need add the <a href="../../modules/arachne-pedestal/">arachne-pedestal</a> Arachne module to our app. <a href="http://pedestal.io">Pedestal</a> is an industrial strength HTTP server for Clojure, and Arachne wraps it, inheriting the benefits that it provides.</p>
+<p>To make our application into an HTTP server, we'll need to add the <a href="../../modules/arachne-pedestal/">arachne-pedestal</a> Arachne module to our app. <a href="http://pedestal.io">Pedestal</a> is an industrial strength HTTP server for Clojure, and Arachne wraps it, inheriting the benefits that it provides.</p>
 <aside>
 <p>The <code>arachne-pedestal</code> module uses Pedestal, as do many of Arachne's official modules, because we needed to pick <i>some</i> http server and Pedestal fit the bill nicely. However, there's nothing about Arachne itself that requires Pedestal; in theory you could also (for example) build an "arachne-ring" module to fill the same role. Most of Arachne's container-agnostic HTTP concepts and handling code is already pulled out into a separate <code>arachne-http</code> module (which <code>arachne-pedestal</code> depends on) and could be freely reused.</p>
 <p>Of course, any modules that depend on <code>arachne-pedestal</code> would then also need to be modified, or alternatives created.</p>
@@ -289,7 +289,7 @@
 <p>This function just responds with <code>"Hello, world!"</code> to any incoming request. Easy enough!</p>
 <p>This is literally all of the project code we need to write to turn our application into a web application. Everything else will be defined in the Arachne configuration.</p>
 <h3 id="server-configuration">Server configuration</h3>
-<p>Now, for the interesting part: updating the config script to start a HTTP server serving up our handler.</p>
+<p>Now, for the interesting part: updating the config script to start an HTTP server serving up our handler.</p>
 <p>First, we will need to define a Component representing our handler function. Add the following to your config script:</p>
 <pre><code>(require '[arachne.http.dsl :as h])
 
@@ -297,7 +297,7 @@
 </code></pre>
 
 <p>The <code>arachne.http.dsl/handler</code> function looks very much like the <code>arachne.core.dsl/component</code> function we used earlier. This is no accident! In fact, <code>handler</code> is actually defining a component, too: just a specific kind of component. The difference is that the function specified should identify a handler function (the one we just wrote) instead of being a constructor that can return an arbitrary object. Note that we still need to give our handler component a name: <code>:myproj/hello</code>. We'll need to refer to this in the next step.</p>
-<p>Next, we will add some DSL forms that define a HTTP server, and tell it how to serve our handler function:</p>
+<p>Next, we will add some DSL forms that define an HTTP server, and tell it how to serve our handler function:</p>
 <pre><code class="clojure">(require '[arachne.pedestal.dsl :as p])
 
 (a/id :myproj/server
@@ -309,7 +309,7 @@
 </code></pre>
 
 <p>The <code>arachne.pedestal.dsl/server</code> form creates yet another component entity named <code>:myproj/server</code>. Instead of passing a symbol that identifies a constructor or a handler function, <code>server</code> requires a port.</p>
-<p>Nested <em>inside</em> the server element, we declare a HTTP endpoint, using the <code>arachne.http.dsl/endpoint</code> function. This function takes three arguments:</p>
+<p>Nested <em>inside</em> the server element, we declare an HTTP endpoint, using the <code>arachne.http.dsl/endpoint</code> function. This function takes three arguments:</p>
 <ul>
 <li>The HTTP method that this endpoint responds to, as a Clojure keyword. You may also pass a set of keywords if the endpoint can respond to multiple request types.</li>
 <li>The route to which to "attach" the endpoint: requests to this route will be delegated to the endpoint.</li>
@@ -362,7 +362,7 @@
 <pre><code>lein run :myproj/app :myproj/runtime
 </code></pre>
 
-<p>You should see log output indicating that the server has started.</p>
+<p>After the version of Pedestal we specified in <code>project.clj</code> is downloaded (if it isn't already installed on your system), you should see log output indicating that the server has started.</p>
 <p>Hit the <code>http://localhost:8080/</code> URL to see your endpoint in action!</p>
 <h3 id="path-params">Path params</h3>
 <p>You aren't limited to specific, hardcoded routes. Arachne (via Pedestal) also allows you to use a colon (similar to a Clojure keyword) to name a route segment, creating a <em>path parameter</em>. Values at that path are then available in the request, in a map under the <code>:path-params</code> key.</p>
