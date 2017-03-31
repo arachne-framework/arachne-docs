@@ -68,7 +68,7 @@ Note that we haven't implemented the `com.stuartsierra.component/Lifecycle` prot
 
 ### Configuration
 
-Now that we have all the code we need, we can define a component to our Arachne config. Replace the definition of `:myproj/widget-1` in your config builder script (`config/myproj.dsl`).
+Now that we have all the code we need, we can define a component to our Arachne config. Replace the definition of `:myproj/widget-1` in your config builder script (`config/myproj/config.clj`).
 
 ````clojure
 (a/id :myproj/robohash (a/component 'myproj.visual-hash/new-robohash))
@@ -114,7 +114,8 @@ Now, all that remains is to actually implement the `:myproj.core/robot` handler 
 
 Because we defined it in the handler dependency map, we know that we'll have a `:hash-component` key available in each request, with our robot-building component as its value.
 
-We just need to invoke the `myproj.visual-hash/vhash` protocol function on our component and the string we want to hash, to get an `InputStream` that we can return as the request body.
+
+We just need to invoke the `myproj.visual-hash/vhash` protocol function on our component and the string we want to hash, to get an `InputStream` that we can return as the response body.
 
 ````clojure
 (defn robot

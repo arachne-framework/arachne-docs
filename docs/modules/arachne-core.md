@@ -45,7 +45,7 @@ An initializer (as defined in the module definition map) may be one of the follo
 
 ### Runtime
 
-A _runtime_ is the top-level executable unit of an Arachne application. While the word "application" or "module" is usually used to refer to the codebase and project structure, a _runtime_ is a named entity that specifies exactly what should happen when it is started and stopped. A single application can contain any number of runtimes, and they may be started and stopped independently of eachother (as long as they do not attempt to utilize the same resources such as network ports.).
+A _runtime_ is the top-level executable unit of an Arachne application. While the word "application" or "module" is usually used to refer to the codebase and project structure, a _runtime_ is a named entity that specifies exactly what should happen when it is started and stopped. A single application can contain any number of runtimes, and they may be started and stopped independently of eachother (as long as they do not attempt to utilize the same resources such as network ports).
 
 A runtime exists first as data in the configuration, a runtime _entity_ that is defined along with the rest of the configuration. When a runtime is launched, the entity is used to instantiate an actual JVM object which is the runtime itself.
 
@@ -92,7 +92,7 @@ Base Components may have the following attributes:
 
 - `:arachne/id` is a qualified keyword that serves to uniquely name a component within a configuration. For components, an `:arachne/id` is optional.
 - `:arachne.component/constructor` is mandatory. Under the hood, every component must have a constructor. This is a namespace-qualified keyword identifying a function that, when invoked, returns a runtime instance of the component.
-- `:arachne.component/dependencies` is a ref to any number of dependency entity. Each dependency entity has two attributes: `arachne.core.component.dependency/ref` is a reference to another component, and `:arachne.core.component.dependency/key` is a keyword. During the Arachne startup process, before each component is instantiated (by calling its constructor), the started instances of the components it depends on are `assoc`'d on using the specified key. If no key is specified, the dependency's entity ID is used as the key.
+- `:arachne.component/dependencies` is a ref to any number of dependency entities. Each dependency entity has two attributes: `arachne.core.component.dependency/ref` is a reference to another component, and `:arachne.core.component.dependency/key` is a keyword. During the Arachne startup process, before each component is instantiated (by calling its constructor), the started instances of the components it depends on are `assoc`'d on using the specified key. If no key is specified, the dependency's entity ID is used as the key.
 
 # DSL
 
