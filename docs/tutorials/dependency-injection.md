@@ -182,7 +182,7 @@ For reading `InputStream` objects into a value we can store, and then spitting t
 
 Finally, rather than caching requests specifically to http://robohash.org and re-implementing the network logic we already wrote, we can use the existing `RoboHash` component as a _delegate_, which has the pleasant side effect of making our caching component more pluggable as well (it will work out of the box with any other component that satisfies the `VisualHash` protocol.)
 
-Armed with this information we can define a new component in the `myproj.value-hash` namespace:
+Armed with this information we can define a new component in the `myproj.visual-hash` namespace:
 
 ````clojure
 (ns myproj.visual-hash
