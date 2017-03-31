@@ -221,7 +221,7 @@ We now have the ability to construct a `VisualHash` component that caches values
 (a/id :myproj/hashcache (a/component 'myproj.visual-hash/new-cache {:delegate :myproj/robohash}))
 ````
 
-The dependency map on a `component` works basically the same as it does for a `handler`, except instead of adding the dependency component on to each request, it is `assoc`'ed to the component instance itself immediately before its `start` method is called. This means that the `:delegate` field which `CachingVisualHash` uses is present and in place before it is used.
+The dependency map on a `component` works basically the same as it does for a `handler`, except instead of adding the dependency component onto each request, it is `assoc`'ed to the component instance itself immediately before its `start` method is called. This means that the `:delegate` field which `CachingVisualHash` uses is present and in place before it is used.
 
 Then, we merely need to swap out `:myproj/robohash` for `:myproj/hashcache` in our handler to start using it:
 
